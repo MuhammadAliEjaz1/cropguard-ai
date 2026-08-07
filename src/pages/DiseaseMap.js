@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
 import { MapPin, AlertTriangle, RefreshCw, Send, X, ChevronDown } from 'lucide-react';
 import axios from 'axios';
 import { API_URL } from '../config';
@@ -135,6 +135,20 @@ function SeverityBadge({ severity }) {
       {s.en} / {s.ur}
     </span>
   );
+}
+
+// ── Force correct fit after layout settles (fixes Leaflet sizing race) ───────
+const PAKISTAN_BOUNDS = [[23.5, 60.5], [37.3, 77.5]];
+function FitPakistanBounds() {
+  const map = useMap();
+  useEffect(() => {
+    const t = setTimeout(() => {
+      map.invalidateSize();
+      map.fitBounds(PAKISTAN_BOUNDS, { padding: [4, 4] });
+    }, 250);
+    return () => clearTimeout(t);
+  }, [map]);
+  return null;
 }
 
 // ── Main Component ───────────────────────────────────────────────────────────
@@ -498,7 +512,6 @@ function DiseaseMap() {
         )}
 
         {/* ── Map ── */}
-        {/* ── Map ── */}
         <div style={{
           borderRadius: 18, overflow: 'hidden',
           border: '1.5px solid #d1fae5',
@@ -518,6 +531,7 @@ function DiseaseMap() {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; OpenStreetMap contributors'
             />
+            <FitPakistanBounds />
             {reports.map((r, i) => {
               const sev = severityLevels.find(s => s.en === r.severity) || severityLevels[1];
               const color = diseaseColors[r.crop] || '#ef4444';
