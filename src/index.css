@@ -1,4 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html, body { overflow-x: hidden; max-width: 100%; }
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.stats-grid > div {
+  border-right: 1px solid #F3F4F6;
+}
+.stats-grid > div:last-child {
+  border-right: none;
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .stats-grid > div {
+    border-right: 1px solid #F3F4F6;
+    border-bottom: 1px solid #F3F4F6;
+  }
+  .stats-grid > div:nth-child(2n) {
+    border-right: none;
+  }
+  .stats-grid > div:nth-child(n+3) {
+    border-bottom: none;
+  }
+}
