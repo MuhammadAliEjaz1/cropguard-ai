@@ -498,20 +498,22 @@ function DiseaseMap() {
         )}
 
         {/* ── Map ── */}
+        {/* ── Map ── */}
         <div style={{
           borderRadius: 18, overflow: 'hidden',
           border: '1.5px solid #d1fae5',
           boxShadow: '0 4px 20px rgba(22,163,74,0.12)',
-          marginBottom: 24, height: 500,
+          marginBottom: 24, height: 680,
+          maxWidth: 720, margin: '0 auto 24px',
         }}>
           <MapContainer
-  bounds={[[23.5, 60.5], [37.3, 77.5]]}
-  boundsOptions={{ padding: [10, 10] }}
-  minZoom={5}
-  maxBounds={[[18.0, 55.0], [40.0, 82.0]]}
-  maxBoundsViscosity={1.0}
-  style={{ height: '100%', width: '100%' }}
->
+            bounds={[[23.5, 60.5], [37.3, 77.5]]}
+            boundsOptions={{ padding: [4, 4] }}
+            minZoom={5}
+            maxBounds={[[18.0, 55.0], [40.0, 82.0]]}
+            maxBoundsViscosity={1.0}
+            style={{ height: '100%', width: '100%' }}
+          >
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; OpenStreetMap contributors'
