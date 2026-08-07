@@ -505,17 +505,70 @@ function DiseaseMap() {
           marginBottom: 24, height: 500,
         }}>
           <MapContainer
-  center={[30.3753, 69.3451]}
-  zoom={6}
-  minZoom={5}
-  maxBounds={[[20.0, 58.0], [40.0, 80.0]]}
-  maxBoundsViscosity={1.0}
-  style={{ height: '100%', width: '100%' }}
->
-  <TileLayer
-    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-    attribution='&copy; OpenStreetMap contributors'
-  />
+            center={[30.3753, 69.3451]}
+            zoom={6}
+            minZoom={5}
+            maxBounds={[[20.0, 58.0], [40.0, 80.0]]}
+            maxBoundsViscosity={1.0}
+            style={{ height: '100%', width: '100%' }}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; OpenStreetMap contributors'
+            />
+            {reports.map((r, i) => {
+              const sev = severityLevels.find(s => s.en === r.severity) || severityLevels[1];
+              const color = diseaseColors[r.crop] || '#ef4444';
+              const advice = getAdvice(r.disease);
+              const cropUr = cropUrdu[r.crop] || r.crop;
+              return (
+                <React.Fragment key={i}>
+                  <Marker position={[r.latitude, r.longitude]}>
+                    <Popup>
+                      <div style={{ fontFamily: 'Segoe UI, sans-serif', minWidth: 180 }}>
+                        <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 4 }}>
+                          {r.crop} ({cropUr}) — {r.disease}
+                        </div>
+                        <div style={{ color: '#6b7280', fontSize: 12, marginBottom: 4 }}>
+                          📍 {r.location_name || 'نامعلوم مقام / Unknown'}
+                        </div>
+                        {r.severity && (
+                          <div style={{ marginBottom: 6 }}>
+                            <SeverityBadge severity={r.severity} />
+                          </div>
+                        )}
+                        <div style={{
+                          background: '#fef9c3', borderRadius: 6, padding: '6px 8px',
+                          fontSize: 11, color: '#713f12', marginBottom: 4,
+                        }}>
+                          ⚠️ {advice.en}
+                        </div>
+                        <div style={{
+                          background: '#fef9c3', borderRadius: 6, padding: '6px 8px',
+                          fontSize: 11, color: '#92400e', direction: 'rtl', textAlign: 'right',
+                        }}>
+                          ⚠️ {advice.ur}
+                        </div>
+                        <div style={{ fontSize: 10, color: '#9ca3af', marginTop: 6 }}>
+                          {new Date(r.timestamp).toLocaleDateString('ur-PK')}
+                        </div>
+                      </div>
+                    </Popup>
+                  </Marker>
+                  <Circle
+                    center={[r.latitude, r.longitude]}
+                    radius={r.severity === 'Severe' ? 25000 : r.severity === 'Moderate' ? 18000 : 12000}
+                    pathOptions={{
+                      color,
+                      fillColor: color,
+                      fillOpacity: r.severity === 'Severe' ? 0.22 : 0.13,
+                      weight: r.severity === 'Severe' ? 2 : 1.5,
+                    }}
+                  />
+                </React.Fragment>
+              );
+            })}
+          </MapContainer>
         </div>
 
         {/* ── Legend ── */}
