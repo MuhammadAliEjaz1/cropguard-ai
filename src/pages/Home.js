@@ -290,7 +290,7 @@ export default function Home() {
       <div ref={statsRef} style={{ background: '#fff', borderBottom: '1px solid #F3F4F6' }}>
         <div style={{
           maxWidth: 860, margin: '0 auto',
-          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+          display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
           divideX: '1px solid #F3F4F6',
         }}>
           {stats.map((s, i) => (
