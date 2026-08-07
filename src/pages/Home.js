@@ -55,11 +55,12 @@ function StatCard({ value, suffix, label, urdu, inView, delay }) {
       transition: `opacity 0.6s ease ${delay}s, transform 0.6s ease ${delay}s`,
     }}>
       <div style={{
-        fontSize: 'clamp(2rem, 4vw, 2.8rem)',
+        fontSize: 'clamp(1.6rem, 6vw, 2.8rem)',
         fontWeight: 900,
         color: '#166534',
         lineHeight: 1,
         fontVariantNumeric: 'tabular-nums',
+        whiteSpace: 'nowrap',
       }}>
         {isFloat ? counted : Number(counted).toLocaleString()}
         {hasPlus ? '+' : ''}{suffix}
@@ -288,13 +289,9 @@ export default function Home() {
 
       {/* ══ STATS ═════════════════════════════════════════════ */}
       <div ref={statsRef} style={{ background: '#fff', borderBottom: '1px solid #F3F4F6' }}>
-        <div style={{
-          maxWidth: 860, margin: '0 auto',
-          display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-          divideX: '1px solid #F3F4F6',
-        }}>
+        <div className="stats-grid" style={{ maxWidth: 860, margin: '0 auto' }}>
           {stats.map((s, i) => (
-            <div key={i} style={{ borderRight: i < 3 ? '1px solid #F3F4F6' : 'none' }}>
+            <div key={i}>
               <StatCard {...s} inView={statsInView} delay={i * 0.1} />
             </div>
           ))}
