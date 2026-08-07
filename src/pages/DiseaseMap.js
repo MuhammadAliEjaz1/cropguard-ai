@@ -505,13 +505,13 @@ function DiseaseMap() {
           marginBottom: 24, height: 500,
         }}>
           <MapContainer
-            center={[30.3753, 69.3451]}
-            zoom={6}
-            minZoom={5}
-            maxBounds={[[20.0, 58.0], [40.0, 80.0]]}
-            maxBoundsViscosity={1.0}
-            style={{ height: '100%', width: '100%' }}
-          >
+  bounds={[[23.5, 60.5], [37.3, 77.5]]}
+  boundsOptions={{ padding: [10, 10] }}
+  minZoom={5}
+  maxBounds={[[18.0, 55.0], [40.0, 82.0]]}
+  maxBoundsViscosity={1.0}
+  style={{ height: '100%', width: '100%' }}
+>
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; OpenStreetMap contributors'
