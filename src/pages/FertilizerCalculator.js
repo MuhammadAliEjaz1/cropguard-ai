@@ -4,10 +4,11 @@ import { Calculator, Leaf, Sprout } from 'lucide-react';
 const fertilizerData = {
   Wheat: {
     emoji: '🌾',
+    urdu: 'گندم',
     perAcre: {
-      DAP:   { bags: 1,   kg: 50,  pricePerBag: 15540 },
-      Urea:  { bags: 1.5, kg: 75,  pricePerBag: 4780  },
-      Potash:{ bags: 0,   kg: 0,   pricePerBag: 7000  },
+      DAP:   { bags: 1,   kg: 50,  pricePerBag: 14800 },
+      Urea:  { bags: 1.5, kg: 75,  pricePerBag: 4600  },
+      Potash:{ bags: 0,   kg: 0,   pricePerBag: 16500  },
     },
     schedule: [
       { time: 'At sowing',          fertilizer: 'DAP 1 bag + Urea half bag' },
@@ -25,10 +26,11 @@ const fertilizerData = {
   },
   Rice: {
     emoji: '🌾',
+    urdu: 'چاول',
     perAcre: {
-      DAP:   { bags: 1,   kg: 50, pricePerBag: 15540 },
-      Urea:  { bags: 1.5, kg: 75, pricePerBag: 4780  },
-      Potash:{ bags: 0.5, kg: 25, pricePerBag: 7000  },
+      DAP:   { bags: 1,   kg: 50, pricePerBag: 14800 },
+      Urea:  { bags: 1.5, kg: 75, pricePerBag: 4600  },
+      Potash:{ bags: 0.5, kg: 25, pricePerBag: 16500  },
     },
     schedule: [
       { time: 'At transplanting',   fertilizer: 'DAP 1 bag + Potash half bag' },
@@ -47,10 +49,11 @@ const fertilizerData = {
   },
   Cotton: {
     emoji: '🌿',
+    urdu: 'کپاس',
     perAcre: {
-      DAP:   { bags: 1,   kg: 50, pricePerBag: 15540 },
-      Urea:  { bags: 1.5, kg: 75, pricePerBag: 4780  },
-      Potash:{ bags: 1,   kg: 50, pricePerBag: 7000  },
+      DAP:   { bags: 1,   kg: 50, pricePerBag: 14800 },
+      Urea:  { bags: 1.5, kg: 75, pricePerBag: 4600  },
+      Potash:{ bags: 1,   kg: 50, pricePerBag: 16500  },
     },
     schedule: [
       { time: 'At sowing',       fertilizer: 'DAP 1 bag + Potash 1 bag' },
@@ -69,10 +72,11 @@ const fertilizerData = {
   },
   Sugarcane: {
     emoji: '🎋',
+    urdu: 'گنا',
     perAcre: {
-      DAP:   { bags: 1.5, kg: 75,  pricePerBag: 15540 },
-      Urea:  { bags: 2.5, kg: 125, pricePerBag: 4780  },
-      Potash:{ bags: 1,   kg: 50,  pricePerBag: 7000  },
+      DAP:   { bags: 1.5, kg: 75,  pricePerBag: 14800 },
+      Urea:  { bags: 2.5, kg: 125, pricePerBag: 4600  },
+      Potash:{ bags: 1,   kg: 50,  pricePerBag: 16500  },
     },
     schedule: [
       { time: 'At planting',   fertilizer: 'DAP 1.5 bags + Potash 1 bag' },
@@ -92,10 +96,11 @@ const fertilizerData = {
   },
   Corn: {
     emoji: '🌽',
+    urdu: 'مکئی',
     perAcre: {
-      DAP:   { bags: 1,   kg: 50, pricePerBag: 15540 },
-      Urea:  { bags: 1.5, kg: 75, pricePerBag: 4780  },
-      Potash:{ bags: 0.5, kg: 25, pricePerBag: 7000  },
+      DAP:   { bags: 1,   kg: 50, pricePerBag: 14800 },
+      Urea:  { bags: 1.5, kg: 75, pricePerBag: 4600  },
+      Potash:{ bags: 0.5, kg: 25, pricePerBag: 16500  },
     },
     schedule: [
       { time: 'At sowing',         fertilizer: 'DAP 1 bag' },
@@ -114,10 +119,11 @@ const fertilizerData = {
   },
   Potato: {
     emoji: '🥔',
+    urdu: 'آلو',
     perAcre: {
-      DAP:   { bags: 1.5, kg: 75, pricePerBag: 15540 },
-      Urea:  { bags: 1,   kg: 50, pricePerBag: 4780  },
-      Potash:{ bags: 1,   kg: 50, pricePerBag: 7000  },
+      DAP:   { bags: 1.5, kg: 75, pricePerBag: 14800 },
+      Urea:  { bags: 1,   kg: 50, pricePerBag: 4600  },
+      Potash:{ bags: 1,   kg: 50, pricePerBag: 16500  },
     },
     schedule: [
       { time: 'At planting',       fertilizer: 'DAP 1.5 bags + Potash 1 bag' },
@@ -133,6 +139,163 @@ const fertilizerData = {
       { name: 'Stomp',         type: 'Herbicide',   target: 'Pre-emergence weed control',          dose: '1L/acre',    price: 4000, unit: 'per liter' },
     ]
   },
+  Sunflower: {
+    emoji: '🌻',
+    urdu: 'گل آفتاب',
+    perAcre: {
+      DAP:   { bags: 1,   kg: 50, pricePerBag: 14800 },
+      Urea:  { bags: 1,   kg: 50, pricePerBag: 4600  },
+      Potash:{ bags: 0,   kg: 0,  pricePerBag: 16500 },
+    },
+    schedule: [
+      { time: 'At sowing',        fertilizer: 'DAP 1 bag' },
+      { time: '30 days',          fertilizer: 'Urea 1 bag' },
+    ],
+    notes: 'Sunflower needs good boron supply for seed filling. Avoid excess nitrogen before flowering.',
+    sprays: [
+      { name: 'Dithane M-45',  type: 'Fungicide',   target: 'Head Rot, Alternaria Leaf Spot',      dose: '400g/acre',  price: 2495, unit: 'per 400g pack' },
+      { name: 'Confidor',      type: 'Insecticide', target: 'Aphids, Jassid, Whitefly',            dose: '80ml/acre',  price: 2950, unit: 'per 100ml bottle' },
+      { name: 'Chlorpyrifos',  type: 'Insecticide', target: 'Termites, Cutworm',                   dose: '500ml/acre', price: 2480, unit: 'per liter' },
+      { name: 'Stomp',         type: 'Herbicide',   target: 'Pre-emergence weed control',          dose: '1L/acre',    price: 4000, unit: 'per liter' },
+      { name: 'Gramoxone',     type: 'Herbicide',   target: 'Pre-sowing weed burndown',            dose: '700ml/acre', price: 1350, unit: 'per liter' },
+    ]
+  },
+  Canola: {
+    emoji: '🌼',
+    urdu: 'کینولا/سرسوں',
+    perAcre: {
+      DAP:   { bags: 1,   kg: 50, pricePerBag: 14800 },
+      Urea:  { bags: 1,   kg: 50, pricePerBag: 4600  },
+      Potash:{ bags: 0,   kg: 0,  pricePerBag: 16500 },
+    },
+    schedule: [
+      { time: 'At sowing',        fertilizer: 'DAP 1 bag' },
+      { time: '30–35 days',       fertilizer: 'Urea 1 bag' },
+    ],
+    notes: 'Canola needs sulfur for good oil quality — apply gypsum if soil is sulfur-deficient.',
+    sprays: [
+      { name: 'Karate',        type: 'Insecticide', target: 'Aphids, Painted Bug',                 dose: '200ml/acre', price: 3400, unit: 'per 500ml bottle' },
+      { name: 'Dithane M-45',  type: 'Fungicide',   target: 'Alternaria Blight, White Rust',       dose: '400g/acre',  price: 2495, unit: 'per 400g pack' },
+      { name: 'Stomp',         type: 'Herbicide',   target: 'Pre-emergence weed control',          dose: '1L/acre',    price: 4000, unit: 'per liter' },
+      { name: 'Gramoxone',     type: 'Herbicide',   target: 'Pre-sowing weed burndown',            dose: '700ml/acre', price: 1350, unit: 'per liter' },
+    ]
+  },
+  Gram: {
+    emoji: '🫘',
+    urdu: 'چنا',
+    perAcre: {
+      DAP:   { bags: 1,   kg: 50, pricePerBag: 14800 },
+      Urea:  { bags: 0,   kg: 0,  pricePerBag: 4600  },
+      Potash:{ bags: 0,   kg: 0,  pricePerBag: 16500 },
+    },
+    schedule: [
+      { time: 'At sowing', fertilizer: 'DAP 1 bag (inoculate seed with Rhizobium culture)' },
+    ],
+    notes: 'Legume crop — fixes its own nitrogen. Avoid Urea, which reduces nodulation and pod set.',
+    sprays: [
+      { name: 'Topsin-M',      type: 'Fungicide',   target: 'Ascochyta Blight, Wilt',              dose: '250g/acre',  price: 2249, unit: 'per 250g pack' },
+      { name: 'Karate',        type: 'Insecticide', target: 'Pod Borer, Cutworm',                  dose: '200ml/acre', price: 3400, unit: 'per 500ml bottle' },
+      { name: 'Stomp',         type: 'Herbicide',   target: 'Pre-emergence weed control',          dose: '1L/acre',    price: 4000, unit: 'per liter' },
+    ]
+  },
+  Barley: {
+    emoji: '🌾',
+    urdu: 'جو',
+    perAcre: {
+      DAP:   { bags: 0.5, kg: 25, pricePerBag: 14800 },
+      Urea:  { bags: 0.75,kg: 37.5,pricePerBag: 4600  },
+      Potash:{ bags: 0,   kg: 0,  pricePerBag: 16500 },
+    },
+    schedule: [
+      { time: 'At sowing',    fertilizer: 'DAP half bag' },
+      { time: 'Tillering',    fertilizer: 'Urea 3/4 bag' },
+    ],
+    notes: 'Barley needs less fertilizer than wheat — over-fertilizing causes lodging.',
+    sprays: [
+      { name: 'Dithane M-45',  type: 'Fungicide',   target: 'Leaf Rust, Powdery Mildew',           dose: '400g/acre',  price: 2495, unit: 'per 400g pack' },
+      { name: 'Chlorpyrifos',  type: 'Insecticide', target: 'Aphids, Termites',                    dose: '500ml/acre', price: 2480, unit: 'per liter' },
+      { name: 'Stomp',         type: 'Herbicide',   target: 'Grassy and broad leaf weeds',         dose: '1L/acre',    price: 4000, unit: 'per liter' },
+    ]
+  },
+  Millet: {
+    emoji: '🌾',
+    urdu: 'باجرہ',
+    perAcre: {
+      DAP:   { bags: 0.5, kg: 25, pricePerBag: 14800 },
+      Urea:  { bags: 0.5, kg: 25, pricePerBag: 4600  },
+      Potash:{ bags: 0,   kg: 0,  pricePerBag: 16500 },
+    },
+    schedule: [
+      { time: 'At sowing', fertilizer: 'DAP half bag' },
+      { time: '30 days',   fertilizer: 'Urea half bag' },
+    ],
+    notes: 'Drought-tolerant crop — needs minimal fertilizer input compared to other cereals.',
+    sprays: [
+      { name: 'Karate',        type: 'Insecticide', target: 'Shoot Fly, Stem Borer',               dose: '200ml/acre', price: 3400, unit: 'per 500ml bottle' },
+      { name: 'Chlorpyrifos',  type: 'Insecticide', target: 'Termites',                            dose: '500ml/acre', price: 2480, unit: 'per liter' },
+      { name: 'Stomp',         type: 'Herbicide',   target: 'Pre-emergence weed control',          dose: '1L/acre',    price: 4000, unit: 'per liter' },
+    ]
+  },
+  Sorghum: {
+    emoji: '🌾',
+    urdu: 'جوار',
+    perAcre: {
+      DAP:   { bags: 0.5, kg: 25, pricePerBag: 14800 },
+      Urea:  { bags: 1,   kg: 50, pricePerBag: 4600  },
+      Potash:{ bags: 0,   kg: 0,  pricePerBag: 16500 },
+    },
+    schedule: [
+      { time: 'At sowing', fertilizer: 'DAP half bag' },
+      { time: '30 days',   fertilizer: 'Urea 1 bag' },
+    ],
+    notes: 'Dual-purpose grain and fodder crop — split Urea gives better tillering.',
+    sprays: [
+      { name: 'Karate',        type: 'Insecticide', target: 'Stem Borer, Shoot Fly',               dose: '200ml/acre', price: 3400, unit: 'per 500ml bottle' },
+      { name: 'Chlorpyrifos',  type: 'Insecticide', target: 'Termites, Cutworm',                   dose: '500ml/acre', price: 2480, unit: 'per liter' },
+      { name: 'Stomp',         type: 'Herbicide',   target: 'Pre-emergence weed control',          dose: '1L/acre',    price: 4000, unit: 'per liter' },
+    ]
+  },
+  Groundnut: {
+    emoji: '🥜',
+    urdu: 'مونگ پھلی',
+    perAcre: {
+      DAP:   { bags: 1,   kg: 50, pricePerBag: 14800 },
+      Urea:  { bags: 0,   kg: 0,  pricePerBag: 4600  },
+      Potash:{ bags: 0,   kg: 0,  pricePerBag: 16500 },
+    },
+    schedule: [
+      { time: 'At sowing', fertilizer: 'DAP 1 bag (inoculate seed with Rhizobium culture)' },
+    ],
+    notes: 'Legume crop — avoid Urea. Apply gypsum at pegging stage for good pod filling.',
+    sprays: [
+      { name: 'Dithane M-45',  type: 'Fungicide',   target: 'Leaf Spot, Rust',                     dose: '400g/acre',  price: 2495, unit: 'per 400g pack' },
+      { name: 'Confidor',      type: 'Insecticide', target: 'Thrips, Jassid',                      dose: '80ml/acre',  price: 2950, unit: 'per 100ml bottle' },
+      { name: 'Karate',        type: 'Insecticide', target: 'Termites, Leaf Miner',                dose: '200ml/acre', price: 3400, unit: 'per 500ml bottle' },
+      { name: 'Stomp',         type: 'Herbicide',   target: 'Pre-emergence weed control',          dose: '1L/acre',    price: 4000, unit: 'per liter' },
+    ]
+  },
+  Onion: {
+    emoji: '🧅',
+    urdu: 'پیاز',
+    perAcre: {
+      DAP:   { bags: 1.5, kg: 75,  pricePerBag: 14800 },
+      Urea:  { bags: 2,   kg: 100, pricePerBag: 4600  },
+      Potash:{ bags: 0.5, kg: 25,  pricePerBag: 16500 },
+    },
+    schedule: [
+      { time: 'At transplanting',        fertilizer: 'DAP 1.5 bags + Potash half bag' },
+      { time: '30 days after transplant', fertilizer: 'Urea 1 bag' },
+      { time: '60 days after transplant', fertilizer: 'Urea 1 bag' },
+    ],
+    notes: 'Heavy feeder — split Urea doses to avoid excess leaf growth that delays bulbing.',
+    sprays: [
+      { name: 'Ridomil Gold',  type: 'Fungicide',   target: 'Purple Blotch, Downy Mildew',         dose: '400g/acre',  price: 2200, unit: 'per 400g pack' },
+      { name: 'Antracol',      type: 'Fungicide',   target: 'Purple Blotch, Stemphylium Blight',   dose: '400g/acre',  price: 2780, unit: 'per 400g pack' },
+      { name: 'Confidor',      type: 'Insecticide', target: 'Thrips (major onion pest)',           dose: '80ml/acre',  price: 2950, unit: 'per 100ml bottle' },
+      { name: 'Chlorpyrifos',  type: 'Insecticide', target: 'Cutworm, Termites',                   dose: '500ml/acre', price: 2480, unit: 'per liter' },
+      { name: 'Stomp',         type: 'Herbicide',   target: 'Pre-emergence weed control',          dose: '1L/acre',    price: 4000, unit: 'per liter' },
+    ]
+  },
 };
 
 const crops   = Object.keys(fertilizerData);
@@ -140,6 +303,25 @@ const typeColors = {
   Fungicide:   'bg-blue-100 text-blue-700',
   Insecticide: 'bg-red-100 text-red-700',
   Herbicide:   'bg-yellow-100 text-yellow-700',
+};
+
+// Parse a quantity string like "400g", "200ml", "1L", or "per liter" into { num, unit: 'g'|'ml' }
+const parseQty = (str) => {
+  if (/per liter/i.test(str) && !/\d/.test(str)) return { num: 1000, unit: 'ml' };
+  const m = str.match(/([\d.]+)\s*(ml|g|l)\b/i);
+  if (!m) return null;
+  let num = parseFloat(m[1]);
+  let unit = m[2].toLowerCase();
+  if (unit === 'l') { num *= 1000; unit = 'ml'; }
+  return { num, unit };
+};
+
+// Cost of one spray application scaled to a given number of acres
+const sprayCostForAcres = (spray, acres) => {
+  const dose = parseQty(spray.dose);
+  const pack = parseQty(spray.unit);
+  if (!dose || !pack || dose.unit !== pack.unit) return null;
+  return Math.round((dose.num / pack.num) * spray.price * acres);
 };
 
 function FertilizerCalculator() {
@@ -166,54 +348,64 @@ function FertilizerCalculator() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
-      {/* Header */}
-      <div className="text-center mb-10">
-        <div className="flex justify-center mb-3">
-          <Calculator size={44} className="text-green-600" />
+      {/* Hero */}
+      <div className="relative overflow-hidden rounded-2xl mb-8 px-6 py-10 text-center"
+           style={{ background: 'linear-gradient(160deg, #14532D 0%, #166534 50%, #15803D 100%)' }}>
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4"
+             style={{ background: 'rgba(255,255,255,0.14)', border: '1px solid rgba(255,255,255,0.25)' }}>
+          <Calculator size={26} color="#fff" />
         </div>
-        <h1 className="text-3xl font-bold text-gray-800">Fertilizer & Spray Guide</h1>
-        <p className="text-gray-500 mt-2">Calculate fertilizer cost and find the right spray for your crop</p>
-        <p className="text-green-600 mt-1">کھاد کی مقدار اور فصل کے لیے مناسب سپرے معلوم کریں</p>
+        <h1 className="text-3xl font-bold text-white">Fertilizer & Spray Guide</h1>
+        <p className="text-white/80 mt-2">Calculate fertilizer cost and find the right spray for your crop</p>
+        <p className="mt-1" style={{ color: '#86EFAC' }}>کھاد کی مقدار اور فصل کے لیے مناسب سپرے معلوم کریں</p>
+        <div className="inline-flex items-center gap-2 mt-4 px-4 py-1.5 rounded-full text-xs font-semibold"
+             style={{ background: 'rgba(255,255,255,0.12)', color: '#dcfce7', border: '1px solid rgba(255,255,255,0.2)' }}>
+          💰 14 crops · Live 2026 fertilizer rates
+        </div>
       </div>
 
       {/* Crop Selector */}
       <div className="mb-6">
         <p className="text-sm font-medium text-gray-600 mb-3">Select Crop / فصل منتخب کریں:</p>
-        <div className="flex flex-wrap gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
           {crops.map(crop => (
             <button
               key={crop}
               onClick={() => { setSelectedCrop(crop); setResult(null); }}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium border transition ${
+              className={`flex items-center gap-2 px-3.5 py-2.5 rounded-xl font-medium border transition text-left ${
                 selectedCrop === crop
-                  ? 'bg-green-600 text-white border-green-600'
-                  : 'bg-white text-gray-600 border-gray-200 hover:border-green-400'
+                  ? 'bg-green-600 text-white border-green-600 shadow-md shadow-green-600/25'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-green-400 hover:bg-green-50'
               }`}
             >
-              {fertilizerData[crop].emoji} {crop}
+              <span className="text-lg">{fertilizerData[crop].emoji}</span>
+              <span className="flex flex-col leading-tight">
+                <span className="text-sm">{crop}</span>
+                <span className={`text-[10px] ${selectedCrop === crop ? 'text-green-100' : 'text-gray-400'}`}>{fertilizerData[crop].urdu}</span>
+              </span>
             </button>
           ))}
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-1 mb-6 p-1 bg-gray-100 rounded-xl w-fit">
         <button
           onClick={() => setActiveTab('fertilizer')}
-          className={`flex items-center gap-2 px-6 py-2 rounded-lg font-medium transition ${
+          className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-sm transition ${
             activeTab === 'fertilizer'
-              ? 'bg-green-600 text-white'
-              : 'bg-white border border-gray-200 text-gray-600 hover:border-green-400'
+              ? 'bg-white text-green-700 shadow-sm'
+              : 'text-gray-500 hover:text-gray-700'
           }`}
         >
           <Leaf size={16} /> Fertilizer Calculator
         </button>
         <button
           onClick={() => setActiveTab('spray')}
-          className={`flex items-center gap-2 px-6 py-2 rounded-lg font-medium transition ${
+          className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-sm transition ${
             activeTab === 'spray'
-              ? 'bg-green-600 text-white'
-              : 'bg-white border border-gray-200 text-gray-600 hover:border-green-400'
+              ? 'bg-white text-green-700 shadow-sm'
+              : 'text-gray-500 hover:text-gray-700'
           }`}
         >
           <Sprout size={16} /> Spray Guide
@@ -298,6 +490,32 @@ function FertilizerCalculator() {
                 ))}
               </div>
 
+              {/* Cost breakdown bar */}
+              <div className="bg-white rounded-xl shadow-sm border p-5">
+                <div className="text-sm font-semibold text-gray-700 mb-3">Cost Breakdown / لاگت کی تقسیم</div>
+                <div className="flex h-3 rounded-full overflow-hidden bg-gray-100">
+                  {Object.entries(result.calc).filter(([, i]) => i.cost > 0).map(([fert, info]) => (
+                    <div
+                      key={fert}
+                      style={{
+                        width: `${(info.cost / result.totalFertCost) * 100}%`,
+                        background: fert === 'DAP' ? '#16a34a' : fert === 'Urea' ? '#4ade80' : '#a3e635',
+                      }}
+                    />
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-4 mt-3">
+                  {Object.entries(result.calc).filter(([, i]) => i.cost > 0).map(([fert, info]) => (
+                    <div key={fert} className="flex items-center gap-1.5 text-xs text-gray-600">
+                      <span className="w-2.5 h-2.5 rounded-full inline-block" style={{
+                        background: fert === 'DAP' ? '#16a34a' : fert === 'Urea' ? '#4ade80' : '#a3e635',
+                      }} />
+                      {fert} — {Math.round((info.cost / result.totalFertCost) * 100)}%
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="bg-green-600 text-white rounded-xl p-6 flex justify-between items-center">
                 <div>
                   <div className="text-green-200 text-sm">Total Fertilizer Cost / کل کھاد لاگت</div>
@@ -312,7 +530,7 @@ function FertilizerCalculator() {
                 <span className="font-bold">💡 Note: </span>
                 {fertilizerData[selectedCrop].notes}
                 <span className="block mt-1 text-yellow-600">
-                  DAP: Rs 15,540/bag | Urea: Rs 4,780/bag | Prices as of 2026.
+                  DAP: Rs 14,800/bag | Urea: Rs 4,600/bag | SOP (Potash): Rs 16,500/bag | Rates as of Aug 2026 — vary by dealer and city.
                 </span>
               </div>
             </div>
@@ -328,6 +546,16 @@ function FertilizerCalculator() {
             includes fungicides, insecticides and herbicides with current 2026 prices.
           </p>
 
+          {result ? (
+            <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-sm text-green-800">
+              💰 Showing cost per application for your <span className="font-bold">{result.acres} acre{result.acres > 1 ? 's' : ''}</span>. Change this on the Fertilizer Calculator tab.
+            </div>
+          ) : (
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm text-gray-500">
+              Enter your land size on the Fertilizer Calculator tab to see the cost for your own farm here.
+            </div>
+          )}
+
           {/* Filter by type */}
           {['Fungicide', 'Insecticide', 'Herbicide'].map(type => {
             const filtered = fertilizerData[selectedCrop].sprays.filter(s => s.type === type);
@@ -340,7 +568,9 @@ function FertilizerCalculator() {
                                            '🟡 Herbicide — جڑی بوٹی مار'}
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4 mb-6">
-                  {filtered.map((spray, i) => (
+                  {filtered.map((spray, i) => {
+                    const scaled = result ? sprayCostForAcres(spray, result.acres) : null;
+                    return (
                     <div key={i} className="bg-white rounded-xl shadow-sm border p-5">
                       <div className="flex justify-between items-start mb-3">
                         <div>
@@ -366,8 +596,15 @@ function FertilizerCalculator() {
                           <span className="text-green-700 font-medium">{spray.dose}</span>
                         </div>
                       </div>
+                      {scaled != null && (
+                        <div className="mt-3 pt-3 border-t flex justify-between items-center">
+                          <span className="text-xs text-gray-500">Cost for {result.acres} acre{result.acres > 1 ? 's' : ''}</span>
+                          <span className="font-bold text-green-700">Rs {scaled.toLocaleString()}</span>
+                        </div>
+                      )}
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             );
