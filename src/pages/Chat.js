@@ -89,16 +89,6 @@ function Message({ msg, isNew }) {
   );
 }
 
-/* ─── CHIP ─────────────────────────────────────────────────── */
-function Chip({ text, onClick }) {
-  return (
-    <button className="cgai-chip" onClick={() => onClick(text)}>
-      <ChevronRight size={10} className="cgai-chip-arr" />
-      {text}
-    </button>
-  );
-}
-
 /* ─── MAIN ─────────────────────────────────────────────────── */
 export default function Chat() {
   const location = useLocation();
@@ -173,15 +163,6 @@ export default function Chat() {
       setLoading(false);
     }
   };
-
-  const suggestions = [
-    'What causes wheat rust?',
-    'گندم کی زنگ کا علاج کیا ہے؟',
-    'Best fertilizer for rice in Punjab?',
-    'کپاس کی بیماریوں سے کیسے بچیں؟',
-    'Best wheat varieties in Pakistan?',
-    'کب بوائی کریں؟',
-  ];
 
   return (
     <>
@@ -525,15 +506,6 @@ export default function Chat() {
           </div>
         </div>
 
-        {/* SUGGESTIONS */}
-        <div className="cgai-sug">
-          <div className="cgai-sug-label">Try asking</div>
-          <div className="cgai-chips">
-            {suggestions.map((s, i) => (
-              <Chip key={i} text={s} onClick={t => { setInput(t); inputRef.current?.focus(); }} />
-            ))}
-          </div>
-        </div>
 
       </div>
     </>
