@@ -153,6 +153,11 @@ function DiseaseMap() {
     severity: 'Moderate',
   });
 
+  const [locationQuery, setLocationQuery]   = useState('');
+  const [locationResults, setLocationResults] = useState([]);
+  const [searchingLocation, setSearchingLocation] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+
   const fetchReports = async () => {
     setLoading(true);
     try {
@@ -167,16 +172,44 @@ function DiseaseMap() {
 
   useEffect(() => { fetchReports(); }, []);
 
-  const handleCitySelect = (e) => {
-    const city = pakistanCities.find(c => c.name === e.target.value);
-    if (city) {
-      setForm(prev => ({
-        ...prev,
-        location_name: city.name,
-        latitude: city.lat,
-        longitude: city.lng,
-      }));
+  // ── Live village/town/city search via OpenStreetMap Nominatim ──────────────
+  useEffect(() => {
+    if (locationQuery.trim().length < 3) {
+      setLocationResults([]);
+      return;
     }
+    setSearchingLocation(true);
+    const t = setTimeout(async () => {
+      try {
+        const res = await axios.get('https://nominatim.openstreetmap.org/search', {
+          params: {
+            format: 'json',
+            countrycodes: 'pk',
+            q: locationQuery,
+            limit: 8,
+            addressdetails: 1,
+          },
+        });
+        setLocationResults(res.data || []);
+      } catch {
+        setLocationResults([]);
+      } finally {
+        setSearchingLocation(false);
+      }
+    }, 500);
+    return () => clearTimeout(t);
+  }, [locationQuery]);
+
+  const selectLocation = (place) => {
+    setForm(p => ({
+      ...p,
+      location_name: place.display_name,
+      latitude: parseFloat(place.lat),
+      longitude: parseFloat(place.lon),
+    }));
+    setLocationQuery(place.display_name);
+    setShowResults(false);
+    setLocationResults([]);
   };
 
   const submitReport = async () => {
@@ -194,6 +227,8 @@ function DiseaseMap() {
       setSubmitted(true);
       setShowForm(false);
       setForm({ crop: 'Wheat', disease: '', location_name: '', latitude: '', longitude: '', severity: 'Moderate' });
+      setLocationQuery('');
+      setLocationResults([]);
       setTimeout(() => setSubmitted(false), 4000);
       fetchReports();
     } catch {
@@ -420,27 +455,57 @@ function DiseaseMap() {
                 />
               </div>
 
-              {/* City */}
-              <div>
-                <label style={labelStyle}>Nearest City / قریب ترین شہر</label>
-                <select onChange={handleCitySelect} style={inputStyle}>
-                  <option value="">-- شہر منتخب کریں --</option>
-                  {pakistanCities.map(c => (
-                    <option key={c.name} value={c.name}>{c.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Location name */}
-              <div>
-                <label style={labelStyle}>Exact Location / مقام کا نام</label>
+              {/* Location search */}
+              <div style={{ position: 'relative', gridColumn: 'span 2' }}>
+                <label style={labelStyle}>Village / Town / City / گاؤں یا شہر تلاش کریں</label>
                 <input
                   type="text"
-                  value={form.location_name}
-                  onChange={e => setForm(p => ({ ...p, location_name: e.target.value }))}
-                  placeholder="e.g. چک ۴۵، اوکاڑہ"
+                  value={locationQuery}
+                  onChange={e => {
+                    setLocationQuery(e.target.value);
+                    setShowResults(true);
+                    if (form.latitude) {
+                      setForm(p => ({ ...p, latitude: '', longitude: '', location_name: '' }));
+                    }
+                  }}
+                  onFocus={() => { if (locationResults.length) setShowResults(true); }}
+                  onBlur={() => setTimeout(() => setShowResults(false), 150)}
+                  placeholder="Start typing e.g. Chak 45, Okara / لکھنا شروع کریں"
                   style={inputStyle}
+                  autoComplete="off"
                 />
+                {searchingLocation && (
+                  <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 4 }}>
+                    تلاش ہو رہی ہے… Searching…
+                  </div>
+                )}
+                {showResults && locationResults.length > 0 && (
+                  <div style={{
+                    position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 20,
+                    background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 10,
+                    marginTop: 4, maxHeight: 220, overflowY: 'auto',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                  }}>
+                    {locationResults.map((place, idx) => (
+                      <div
+                        key={idx}
+                        onMouseDown={() => selectLocation(place)}
+                        style={{
+                          padding: '9px 13px', fontSize: 13, cursor: 'pointer',
+                          borderBottom: idx < locationResults.length - 1 ? '1px solid #f3f4f6' : 'none',
+                          color: '#374151',
+                        }}
+                      >
+                        📍 {place.display_name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {form.latitude && form.location_name && (
+                  <div style={{ fontSize: 11, color: '#16a34a', marginTop: 4, fontWeight: 600 }}>
+                    ✓ منتخب / Selected: {form.location_name}
+                  </div>
+                )}
               </div>
 
               {/* Severity */}
