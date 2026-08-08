@@ -250,6 +250,334 @@ const cropData = {
       },
     },
   },
+  Sunflower: {
+    emoji: '🌻', urdu: 'گل آفتاب', season: 'Zaid', seasonLabel: 'Spring & Autumn Crop',
+    regions: {
+      Punjab: {
+        sowing: 'Spring: Jan 15 — Feb 28\nAutumn: Aug 1 — Aug 31', germination: '8–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'Urea 1 bag/acre at 30 days',
+        irrigation: '5–6 irrigations\n• 1st: at sowing\n• Every 15–18 days\n• Critical at flowering & seed filling',
+        harvest: 'Apr–May (spring) | Nov–Dec (autumn)', yield: '20–28', yieldMax: 28,
+        varieties: 'Hysun-33, FH-331',
+        tips: 'Spring crop gives higher yield. Bird damage near harvest is a major issue — netting recommended.',
+      },
+      Sindh: {
+        sowing: 'Spring: Jan 1 — Feb 15\nAutumn: Aug 1 — Aug 31', germination: '8–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'Urea 1 bag/acre at 30 days',
+        irrigation: '5–7 irrigations (hotter climate needs more frequent watering)',
+        harvest: 'Apr (spring) | Nov–Dec (autumn)', yield: '18–25', yieldMax: 25,
+        varieties: 'Hysun-33',
+        tips: 'Grown as an oilseed alternative to cotton in some Sindh districts.',
+      },
+      KPK: {
+        sowing: 'Feb 1 — Mar 15', germination: '8–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'Urea 1 bag/acre at 30 days',
+        irrigation: '4–5 irrigations',
+        harvest: 'May — June', yield: '15–20', yieldMax: 20,
+        varieties: 'Local hybrids',
+        tips: 'Limited cultivation — Mardan and Peshawar valley are the main areas.',
+      },
+      Balochistan: {
+        sowing: 'Feb 1 — Mar 15', germination: '8–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'Urea 1 bag/acre at 30 days',
+        irrigation: '4–5 irrigations (tube wells)',
+        harvest: 'May — June', yield: '12–18', yieldMax: 18,
+        varieties: 'Local varieties',
+        tips: 'Minor crop, grown mostly in Naseerabad division.',
+      },
+    },
+  },
+  Canola: {
+    emoji: '🌼', urdu: 'کینولا/سرسوں', season: 'Rabi', seasonLabel: 'Rabi (Winter Crop)',
+    regions: {
+      Punjab: {
+        sowing: 'September 15 — October 31', germination: '5–7 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'Urea 1 bag/acre at 30–35 days',
+        irrigation: '3–4 irrigations\n• 1st: 3–4 weeks after sowing\n• Critical at flowering & pod formation',
+        harvest: 'February 15 — March 31', yield: '15–22', yieldMax: 22,
+        varieties: 'Faisal Canola, Punjab Canola',
+        tips: 'Canola-quality varieties give better oil quality than traditional sarson. Avoid waterlogging.',
+      },
+      Sindh: {
+        sowing: 'October 1 — October 31', germination: '5–7 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'Urea 1 bag/acre at 30 days',
+        irrigation: '3–4 irrigations',
+        harvest: 'February — March', yield: '12–18', yieldMax: 18,
+        varieties: 'Local mustard varieties',
+        tips: 'Grown as a minor Rabi oilseed, often intercropped with wheat.',
+      },
+      KPK: {
+        sowing: 'September 15 — October 15', germination: '5–7 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'Urea 1 bag/acre at 30 days',
+        irrigation: '3–4 irrigations (rain-fed areas need less)',
+        harvest: 'March — April', yield: '12–16', yieldMax: 16,
+        varieties: 'Local varieties',
+        tips: 'Common in Barani (rain-fed) areas as an oilseed and fodder crop.',
+      },
+      Balochistan: {
+        sowing: 'September 1 — October 15', germination: '5–7 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'Urea ½ bag/acre at 30 days',
+        irrigation: '2–3 irrigations (drought-tolerant)',
+        harvest: 'March — April', yield: '8–14', yieldMax: 14,
+        varieties: 'Local varieties',
+        tips: 'Drought-tolerant oilseed option for Barani Balochistan.',
+      },
+    },
+  },
+  Gram: {
+    emoji: '🫘', urdu: 'چنا', season: 'Rabi', seasonLabel: 'Rabi (Winter Crop)',
+    regions: {
+      Punjab: {
+        sowing: 'Oct 1 — Nov 15 (Barani)\nSept 15 — Oct 15 (irrigated)', germination: '7–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing (legume — no urea needed)',
+        fertilizer2: 'None — inoculate seed with Rhizobium culture instead',
+        irrigation: 'Rain-fed: usually none needed\nIrrigated: 1–2 irrigations at flowering & pod filling',
+        harvest: 'March — April', yield: '12–18', yieldMax: 18,
+        varieties: 'Punjab-2011, Noor-2013',
+        tips: 'Chakwal, Attock, Mianwali are major Barani gram areas. Avoid excess irrigation — causes vegetative growth over pods.',
+      },
+      Sindh: {
+        sowing: 'October 15 — November 15', germination: '7–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'None needed (legume)',
+        irrigation: '1–2 irrigations',
+        harvest: 'March', yield: '10–14', yieldMax: 14,
+        varieties: 'Local varieties',
+        tips: 'Minor crop in Sindh, grown on residual soil moisture.',
+      },
+      KPK: {
+        sowing: 'October 1 — November 1', germination: '7–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'None needed (legume)',
+        irrigation: 'Mostly rain-fed — no irrigation',
+        harvest: 'April — May', yield: '10–15', yieldMax: 15,
+        varieties: 'Local varieties',
+        tips: 'Widely grown in Barani KPK districts like Karak and Bannu.',
+      },
+      Balochistan: {
+        sowing: 'October 1 — November 15', germination: '7–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'None needed (legume)',
+        irrigation: 'Rain-fed, 0–1 irrigation',
+        harvest: 'April — May', yield: '8–12', yieldMax: 12,
+        varieties: 'Kaballi (large-seed) types',
+        tips: 'Balochistan is a major gram-growing province, especially Kaballi chickpea for export.',
+      },
+    },
+  },
+  Barley: {
+    emoji: '🌾', urdu: 'جو', season: 'Rabi', seasonLabel: 'Rabi (Winter Crop)',
+    regions: {
+      Punjab: {
+        sowing: 'October 15 — November 15', germination: '6–8 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea ½ bag/acre at tillering',
+        irrigation: '2–3 irrigations (needs less water than wheat)',
+        harvest: 'March — April', yield: '20–28', yieldMax: 28,
+        varieties: 'Jau-87, Frontier-87',
+        tips: 'More drought and salinity tolerant than wheat — a good choice for marginal land.',
+      },
+      Sindh: {
+        sowing: 'November 1 — November 30', germination: '6–8 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea ½ bag/acre at tillering',
+        irrigation: '2–3 irrigations',
+        harvest: 'March', yield: '18–24', yieldMax: 24,
+        varieties: 'Local varieties',
+        tips: 'Minor crop, mostly grown for animal feed.',
+      },
+      KPK: {
+        sowing: 'October 15 — November 15', germination: '6–8 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea ½ bag/acre at tillering',
+        irrigation: '1–2 irrigations (mostly rain-fed)',
+        harvest: 'April — May', yield: '15–22', yieldMax: 22,
+        varieties: 'Local varieties',
+        tips: 'Common Barani crop in cooler, higher-elevation areas.',
+      },
+      Balochistan: {
+        sowing: 'October 1 — November 15', germination: '6–8 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea ½ bag/acre at tillering',
+        irrigation: '1–2 irrigations (drought-tolerant)',
+        harvest: 'April — May', yield: '12–18', yieldMax: 18,
+        varieties: 'Drought-tolerant local types',
+        tips: "Well suited to Balochistan's dry Barani tracts.",
+      },
+    },
+  },
+  Millet: {
+    emoji: '🌾', urdu: 'باجرہ', season: 'Kharif', seasonLabel: 'Kharif (Summer Crop)',
+    regions: {
+      Punjab: {
+        sowing: 'June 15 — July 31', germination: '5–7 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea ½ bag/acre at 30 days',
+        irrigation: '2–3 irrigations (drought-tolerant, rain-fed in many areas)',
+        harvest: 'September — October', yield: '15–20', yieldMax: 20,
+        varieties: 'Local & hybrid bajra',
+        tips: 'Thal and Cholistan are major bajra tracts — thrives in sandy, low-rainfall soil.',
+      },
+      Sindh: {
+        sowing: 'July 1 — July 31', germination: '5–7 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea ½ bag/acre at 30 days',
+        irrigation: '2–3 irrigations',
+        harvest: 'October', yield: '12–18', yieldMax: 18,
+        varieties: 'Local varieties',
+        tips: 'Grown mainly in Tharparkar and Sanghar as a drought-resilient staple.',
+      },
+      KPK: {
+        sowing: 'June 15 — July 15', germination: '5–7 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea ½ bag/acre at 30 days',
+        irrigation: '1–2 irrigations (mostly rain-fed)',
+        harvest: 'September', yield: '10–15', yieldMax: 15,
+        varieties: 'Local varieties',
+        tips: 'Minor crop, grown in southern Barani districts like D.I. Khan.',
+      },
+      Balochistan: {
+        sowing: 'June 1 — July 15', germination: '5–7 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea ½ bag/acre at 30 days',
+        irrigation: '1–2 irrigations (drought-tolerant)',
+        harvest: 'September — October', yield: '8–14', yieldMax: 14,
+        varieties: 'Drought-tolerant local types',
+        tips: "Well-suited to Balochistan's arid climate — needs minimal water.",
+      },
+    },
+  },
+  Sorghum: {
+    emoji: '🌾', urdu: 'جوار', season: 'Kharif', seasonLabel: 'Kharif (Summer Crop)',
+    regions: {
+      Punjab: {
+        sowing: 'June 15 — July 31', germination: '6–8 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea 1 bag/acre at 30 days',
+        irrigation: '3–4 irrigations',
+        harvest: 'September — October', yield: '18–25', yieldMax: 25,
+        varieties: 'Grain & fodder varieties',
+        tips: 'Widely grown as a dual-purpose grain and green fodder (chari) crop.',
+      },
+      Sindh: {
+        sowing: 'July 1 — July 31', germination: '6–8 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea 1 bag/acre at 30 days',
+        irrigation: '3–4 irrigations',
+        harvest: 'October', yield: '15–22', yieldMax: 22,
+        varieties: 'Local varieties',
+        tips: 'Grown for both grain and green fodder across Sindh.',
+      },
+      KPK: {
+        sowing: 'June 15 — July 15', germination: '6–8 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea 1 bag/acre at 30 days',
+        irrigation: '2–3 irrigations',
+        harvest: 'September', yield: '12–18', yieldMax: 18,
+        varieties: 'Local varieties',
+        tips: 'Common fodder crop in southern KPK districts.',
+      },
+      Balochistan: {
+        sowing: 'June 1 — July 15', germination: '6–8 days',
+        fertilizer1: 'DAP ½ bag/acre at sowing',
+        fertilizer2: 'Urea ½ bag/acre at 30 days',
+        irrigation: '2–3 irrigations (drought-tolerant)',
+        harvest: 'September — October', yield: '10–16', yieldMax: 16,
+        varieties: 'Drought-tolerant local types',
+        tips: 'Grown mainly as livestock fodder in Nasirabad and Jaffarabad.',
+      },
+    },
+  },
+  Groundnut: {
+    emoji: '🥜', urdu: 'مونگ پھلی', season: 'Kharif', seasonLabel: 'Kharif (Summer Crop)',
+    regions: {
+      Punjab: {
+        sowing: 'April 15 — May 31', germination: '8–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing (legume — no urea needed)',
+        fertilizer2: 'None — inoculate seed with Rhizobium culture',
+        irrigation: '5–6 irrigations\n• Critical at flowering & pegging (pod formation)',
+        harvest: 'September — October', yield: '25–35', yieldMax: 35,
+        varieties: 'BARI-2000, Golden',
+        tips: 'Chakwal and Attock (Barani Punjab) are major groundnut belts. Light, sandy soil is essential for good pod development.',
+      },
+      Sindh: {
+        sowing: 'April 1 — May 15', germination: '8–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'None needed (legume)',
+        irrigation: '5–6 irrigations',
+        harvest: 'September', yield: '20–28', yieldMax: 28,
+        varieties: 'Local varieties',
+        tips: 'Minor crop in Sindh, does best in sandy loam soils.',
+      },
+      KPK: {
+        sowing: 'April 15 — May 31', germination: '8–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'None needed (legume)',
+        irrigation: '4–5 irrigations',
+        harvest: 'September — October', yield: '18–25', yieldMax: 25,
+        varieties: 'Local varieties',
+        tips: 'Grown in Barani tracts alongside the groundnut belts of northern Punjab.',
+      },
+      Balochistan: {
+        sowing: 'April 15 — May 31', germination: '8–10 days',
+        fertilizer1: 'DAP 1 bag/acre at sowing',
+        fertilizer2: 'None needed (legume)',
+        irrigation: '4–5 irrigations',
+        harvest: 'September — October', yield: '15–22', yieldMax: 22,
+        varieties: 'Local varieties',
+        tips: 'Best suited to well-drained sandy soils in southern Balochistan.',
+      },
+    },
+  },
+  Onion: {
+    emoji: '🧅', urdu: 'پیاز', season: 'Rabi', seasonLabel: 'Rabi (Winter Crop)',
+    regions: {
+      Punjab: {
+        sowing: 'Nursery: Sept 1–30\nTransplant: Oct 15 – Nov 30', germination: '8–10 days (nursery)',
+        fertilizer1: 'DAP 1.5 bags/acre at transplanting',
+        fertilizer2: 'Urea 1 bag/acre at 30 & 60 days after transplanting',
+        irrigation: '10–12 irrigations\n• Every 10–12 days\n• Stop 2–3 weeks before harvest',
+        harvest: 'March — April', yield: '150–200', yieldMax: 200,
+        varieties: 'Phulkara, Swat-1',
+        tips: 'Avoid over-irrigation near harvest — causes neck rot and poor storage life.',
+      },
+      Sindh: {
+        sowing: 'Nursery: Aug 15–Sept 15\nTransplant: Oct 1 – Nov 15', germination: '8–10 days',
+        fertilizer1: 'DAP 1.5 bags/acre at transplanting',
+        fertilizer2: 'Urea 1 bag/acre at 30 & 60 days',
+        irrigation: '10–14 irrigations',
+        harvest: 'February — March', yield: '180–250', yieldMax: 250,
+        varieties: 'Red globe types',
+        tips: "Sindh (Hyderabad, Khairpur, Mirpurkhas) is Pakistan's top onion-producing region.",
+      },
+      KPK: {
+        sowing: 'Nursery: Sept 1–30\nTransplant: Oct 15 – Nov 30', germination: '8–10 days',
+        fertilizer1: 'DAP 1.5 bags/acre at transplanting',
+        fertilizer2: 'Urea 1 bag/acre at 30 & 60 days',
+        irrigation: '8–10 irrigations',
+        harvest: 'April — May', yield: '120–160', yieldMax: 160,
+        varieties: 'Local varieties',
+        tips: 'Grown mainly in Mardan and Swabi for both fresh use and seed production.',
+      },
+      Balochistan: {
+        sowing: 'Nursery: Sept 1–30\nTransplant: Nov 1 – Nov 30', germination: '8–10 days',
+        fertilizer1: 'DAP 1.5 bags/acre at transplanting',
+        fertilizer2: 'Urea 1 bag/acre at 30 & 60 days',
+        irrigation: '8–10 irrigations',
+        harvest: 'April — May', yield: '100–140', yieldMax: 140,
+        varieties: 'Local varieties',
+        tips: 'Quetta valley onion is known for strong flavor and good storage quality.',
+      },
+    },
+  },
 };
 
 const CROPS = Object.keys(cropData);
@@ -258,18 +586,31 @@ const REGIONS = ['Punjab', 'Sindh', 'KPK', 'Balochistan'];
 /* ─── TIMELINE BAR ─────────────────────────────────────────── */
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
+// Rough month mapping [sowStart, sowEnd, harvStart, harvEnd] per crop/region
+const TIMELINES = {
+  Wheat:     { Punjab: [10,11,4,5],  Sindh: [11,11,3,4],  KPK: [10,10,5,6],  Balochistan: [10,11,5,6] },
+  Rice:      { Punjab: [6,7,10,11],  Sindh: [7,7,11,12],  KPK: [6,6,9,10],   Balochistan: [6,7,10,11] },
+  Cotton:    { Punjab: [4,5,9,12],   Sindh: [4,5,9,12],   KPK: [4,5,9,11],   Balochistan: [4,5,9,11] },
+  Sugarcane: { Punjab: [2,3,11,3],   Sindh: [10,11,12,4], KPK: [2,3,11,1],   Balochistan: [2,3,11,2] },
+  Corn:      { Punjab: [2,7,5,11],   Sindh: [6,7,10,11],  KPK: [4,5,8,9],    Balochistan: [4,5,8,10] },
+  Potato:    { Punjab: [10,11,1,3],  Sindh: [11,12,2,3],  KPK: [3,10,6,1],   Balochistan: [3,4,6,7] },
+  Sunflower: { Punjab: [1,2,4,5],    Sindh: [1,2,4,4],    KPK: [2,3,5,6],    Balochistan: [2,3,5,6] },
+  Canola:    { Punjab: [9,10,2,3],   Sindh: [10,10,2,3],  KPK: [9,10,3,4],   Balochistan: [9,10,3,4] },
+  Gram:      { Punjab: [10,11,3,4],  Sindh: [10,11,3,3],  KPK: [10,11,4,5],  Balochistan: [10,11,4,5] },
+  Barley:    { Punjab: [10,11,3,4],  Sindh: [11,11,3,3],  KPK: [10,11,4,5],  Balochistan: [10,11,4,5] },
+  Millet:    { Punjab: [6,7,9,10],   Sindh: [7,7,10,10],  KPK: [6,7,9,9],    Balochistan: [6,7,9,10] },
+  Sorghum:   { Punjab: [6,7,9,10],   Sindh: [7,7,10,10],  KPK: [6,7,9,9],    Balochistan: [6,7,9,10] },
+  Groundnut: { Punjab: [4,5,9,10],   Sindh: [4,5,9,9],    KPK: [4,5,9,10],   Balochistan: [4,5,9,10] },
+  Onion:     { Punjab: [10,11,3,4],  Sindh: [10,11,2,3],  KPK: [10,11,4,5],  Balochistan: [11,11,4,5] },
+};
+
+// Given a range that may wrap around the year (e.g. Nov–Feb), check if a month falls inside it
+const monthInRange = (mo, start, end) =>
+  end >= start ? (mo >= start && mo <= end) : (mo >= start || mo <= end);
+
 function SeasonTimeline({ crop, region }) {
   const d = cropData[crop].regions[region];
-  // Rough month mapping from text
-  const timelines = {
-    Wheat:     { Punjab: [10,11,4,5],  Sindh: [11,11,3,4],  KPK: [10,10,5,6],  Balochistan: [10,11,5,6] },
-    Rice:      { Punjab: [6,7,10,11],  Sindh: [7,7,11,12],  KPK: [6,6,9,10],   Balochistan: [6,7,10,11] },
-    Cotton:    { Punjab: [4,5,9,12],   Sindh: [4,5,9,12],   KPK: [4,5,9,11],   Balochistan: [4,5,9,11] },
-    Sugarcane: { Punjab: [2,3,11,3],   Sindh: [10,11,12,4], KPK: [2,3,11,1],   Balochistan: [2,3,11,2] },
-    Corn:      { Punjab: [2,7,5,11],   Sindh: [6,7,10,11],  KPK: [4,5,8,9],    Balochistan: [4,5,8,10] },
-    Potato:    { Punjab: [10,11,1,3],  Sindh: [11,12,2,3],  KPK: [3,10,6,1],   Balochistan: [3,4,6,7] },
-  };
-  const [sowStart, sowEnd, harvStart, harvEnd] = timelines[crop][region];
+  const [sowStart, sowEnd, harvStart, harvEnd] = TIMELINES[crop][region];
 
   return (
     <div className="mb-1">
@@ -325,6 +666,57 @@ function InfoCard({ icon, title, urdu, value, delay = 0 }) {
   );
 }
 
+/* ─── THIS MONTH PANEL ────────────────────────────────────── */
+function ThisMonthPanel({ region, onPick }) {
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1;
+  const monthName = MONTHS[now.getMonth()];
+
+  const sowNow = [];
+  const harvestNow = [];
+  CROPS.forEach(c => {
+    const range = TIMELINES[c]?.[region];
+    if (!range) return;
+    const [sowStart, sowEnd, harvStart, harvEnd] = range;
+    if (monthInRange(currentMonth, sowStart, sowEnd)) sowNow.push(c);
+    if (monthInRange(currentMonth, harvStart, harvEnd)) harvestNow.push(c);
+  });
+
+  return (
+    <div className="this-month-card">
+      <div className="this-month-header">
+        <span className="this-month-badge">📅 {monthName} &nbsp;·&nbsp; {region}</span>
+        <span className="this-month-title">What To Do This Month</span>
+        <span className="this-month-urdu">اس مہینے کیا کریں</span>
+      </div>
+      <div className="this-month-cols">
+        <div className="this-month-col">
+          <div className="this-month-col-label sow">🌱 Sow Now &nbsp;·&nbsp; بوائی کا وقت</div>
+          {sowNow.length === 0 && <div className="this-month-empty">No major crops to sow in {region} this month.</div>}
+          <div className="this-month-chips">
+            {sowNow.map(c => (
+              <button key={c} className="this-month-chip sow" onClick={() => onPick(c)}>
+                <span>{cropData[c].emoji}</span> {c}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="this-month-col">
+          <div className="this-month-col-label harvest">🌾 Harvest Now &nbsp;·&nbsp; کٹائی کا وقت</div>
+          {harvestNow.length === 0 && <div className="this-month-empty">No major crops to harvest in {region} this month.</div>}
+          <div className="this-month-chips">
+            {harvestNow.map(c => (
+              <button key={c} className="this-month-chip harvest" onClick={() => onPick(c)}>
+                <span>{cropData[c].emoji}</span> {c}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── MAIN COMPONENT ───────────────────────────────────────── */
 export default function CropCalendar() {
   const [crop, setCrop] = useState('Wheat');
@@ -340,6 +732,7 @@ export default function CropCalendar() {
     Rabi: { bg: '#eff6ff', text: '#1d4ed8', border: '#bfdbfe' },
     Kharif: { bg: '#fff7ed', text: '#c2410c', border: '#fed7aa' },
     Annual: { bg: '#f0fdf4', text: '#15803d', border: '#bbf7d0' },
+    Zaid: { bg: '#fef3c7', text: '#a16207', border: '#fde68a' },
   };
   const sc = seasonColors[meta.season];
 
@@ -522,6 +915,49 @@ export default function CropCalendar() {
         /* ── SECTION WRAPPER ── */
         .section-box { padding: 0 20px 24px; }
         .section-divider { height: 1px; background: #f3f4f6; margin: 0 20px 20px; }
+
+        /* ── THIS MONTH PANEL ── */
+        .this-month-card {
+          background: linear-gradient(135deg, #14532d 0%, #166534 55%, #15803d 100%);
+          border-radius: 16px;
+          padding: 20px 22px 22px;
+          box-shadow: 0 8px 24px rgba(20,83,45,0.25);
+        }
+        .this-month-header { margin-bottom: 16px; }
+        .this-month-badge {
+          display: inline-block;
+          background: rgba(255,255,255,0.14);
+          border: 1px solid rgba(255,255,255,0.25);
+          color: #bbf7d0;
+          font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+          border-radius: 999px; padding: 4px 12px;
+          margin-bottom: 8px;
+        }
+        .this-month-title {
+          display: block;
+          font-family: 'DM Serif Display', Georgia, serif;
+          font-size: 1.3rem; color: #fff; font-weight: 400;
+        }
+        .this-month-urdu { display: block; font-size: 0.85rem; color: #86efac; margin-top: 2px; }
+        .this-month-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media (max-width: 500px) { .this-month-cols { grid-template-columns: 1fr; } }
+        .this-month-col-label {
+          font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;
+          color: #dcfce7; margin-bottom: 8px;
+        }
+        .this-month-empty { font-size: 0.78rem; color: rgba(255,255,255,0.55); font-style: italic; }
+        .this-month-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .this-month-chip {
+          display: flex; align-items: center; gap: 5px;
+          background: rgba(255,255,255,0.95);
+          border: none; border-radius: 8px;
+          padding: 6px 10px; font-size: 0.78rem; font-weight: 600;
+          color: #14532d; cursor: pointer;
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .this-month-chip:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.2); }
+        .this-month-chip.sow { border-left: 3px solid #16a34a; }
+        .this-month-chip.harvest { border-left: 3px solid #f59e0b; }
         .section-head { padding: 20px 20px 12px; }
       `}</style>
 
@@ -535,6 +971,11 @@ export default function CropCalendar() {
           <h1>Crop Calendar</h1>
           <p className="cc-hero-sub">Sowing · Irrigation · Fertilizer · Harvest — All Pakistani crops</p>
           <span className="cc-hero-urdu">پاکستانی فصلوں کا زرعی کیلنڈر</span>
+        </div>
+
+        {/* THIS MONTH PANEL */}
+        <div className="section-box" style={{ paddingTop: 0 }}>
+          <ThisMonthPanel region={region} onPick={(c) => change(() => setCrop(c))} />
         </div>
 
         <div className="section-divider" />
