@@ -13,6 +13,9 @@ export default function Admin() {
   const [authed, setAuthed]     = useState(false);
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
+  const [authChecking, setAuthChecking] = useState(false);
+
+  const [adminTab, setAdminTab] = useState('fertilizer'); // 'fertilizer' | 'reports'
 
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,6 +25,56 @@ export default function Admin() {
   const [saveMsg, setSaveMsg] = useState(null); // { type: 'success' | 'error', text }
 
   const [globalRates, setGlobalRates] = useState({ DAP: '', Urea: '', Potash: '' });
+
+  const [reports, setReports]           = useState([]);
+  const [reportsLoading, setReportsLoading] = useState(false);
+  const [reportsMsg, setReportsMsg]     = useState(null);
+  const [deletingId, setDeletingId]     = useState(null);
+
+  const fetchReports = async () => {
+    setReportsLoading(true);
+    try {
+      const res = await axios.get(`${API_URL}/reports`);
+      setReports(res.data.reports || []);
+    } catch {
+      setReportsMsg({ type: 'error', text: 'Could not load reports.' });
+    } finally {
+      setReportsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (authed && adminTab === 'reports') fetchReports();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authed, adminTab]);
+
+  const deleteReport = async (id) => {
+    if (!window.confirm(`Delete report #${id}? This cannot be undone.`)) return;
+    setDeletingId(id);
+    setReportsMsg(null);
+    try {
+      await axios.post(`${API_URL}/admin/delete-report`, { password, report_id: id });
+      setReports(prev => prev.filter(r => r.id !== id));
+      setReportsMsg({ type: 'success', text: `Report #${id} deleted.` });
+    } catch (e) {
+      setReportsMsg({ type: 'error', text: 'Delete failed: ' + (e.response?.data?.detail || e.message) });
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const clearAllReports = async () => {
+    if (!window.confirm(`Delete ALL ${reports.length} reports? This cannot be undone.`)) return;
+    if (!window.confirm('Really sure? This wipes every disease report permanently.')) return;
+    setReportsMsg(null);
+    try {
+      await axios.post(`${API_URL}/admin/clear-reports`, { password });
+      setReports([]);
+      setReportsMsg({ type: 'success', text: 'All reports cleared.' });
+    } catch (e) {
+      setReportsMsg({ type: 'error', text: 'Clear failed: ' + (e.response?.data?.detail || e.message) });
+    }
+  };
 
   useEffect(() => {
     if (!authed) return;
@@ -40,8 +93,6 @@ export default function Admin() {
       }
     })();
   }, [authed]);
-
-  const [authChecking, setAuthChecking] = useState(false);
 
   const tryLogin = async () => {
     if (password.trim().length === 0) {
@@ -167,11 +218,11 @@ export default function Admin() {
     );
   }
 
-  if (loading) {
+  if (adminTab === 'fertilizer' && loading) {
     return <div className="min-h-[50vh] flex items-center justify-center text-gray-500">Loading current data…</div>;
   }
 
-  if (loadError) {
+  if (adminTab === 'fertilizer' && loadError) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center px-4">
         <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-red-700 max-w-md text-center">
@@ -182,25 +233,49 @@ export default function Admin() {
     );
   }
 
-  const crops = Object.keys(data);
-  const crop = data[selectedCrop];
+  const crops = data ? Object.keys(data) : [];
+  const crop = data ? data[selectedCrop] : null;
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Fertilizer & Spray Data — Admin</h1>
-          <p className="text-sm text-gray-500">Changes here update the live Fertilizer Calculator for everyone.</p>
+          <h1 className="text-2xl font-bold text-gray-800">CropGuard AI — Admin</h1>
+          <p className="text-sm text-gray-500">Manage live app data. Changes here affect everyone.</p>
         </div>
+        {adminTab === 'fertilizer' && (
+          <button
+            onClick={save}
+            disabled={saving}
+            className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
+          >
+            <Save size={16} /> {saving ? 'Saving…' : 'Save All Changes'}
+          </button>
+        )}
+      </div>
+
+      {/* Tab switcher */}
+      <div className="flex gap-1 mb-6 p-1 bg-gray-100 rounded-xl w-fit">
         <button
-          onClick={save}
-          disabled={saving}
-          className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
+          onClick={() => setAdminTab('fertilizer')}
+          className={`px-5 py-2 rounded-lg font-medium text-sm transition ${
+            adminTab === 'fertilizer' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+          }`}
         >
-          <Save size={16} /> {saving ? 'Saving…' : 'Save All Changes'}
+          Fertilizer & Spray
+        </button>
+        <button
+          onClick={() => setAdminTab('reports')}
+          className={`px-5 py-2 rounded-lg font-medium text-sm transition ${
+            adminTab === 'reports' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Disease Reports
         </button>
       </div>
 
+      {adminTab === 'fertilizer' && (
+      <>
       {saveMsg && (
         <div className={`flex items-center gap-2 rounded-lg px-4 py-3 mb-5 text-sm ${
           saveMsg.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'
@@ -345,6 +420,90 @@ export default function Admin() {
           <Save size={16} /> {saving ? 'Saving…' : 'Save All Changes'}
         </button>
       </div>
+      </>
+      )}
+
+      {adminTab === 'reports' && (
+        <div>
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <p className="text-sm text-gray-500">
+              {reports.length} report{reports.length !== 1 ? 's' : ''} total. Deletions are permanent and saved immediately.
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={fetchReports}
+                className="flex items-center gap-2 bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:border-green-400 transition"
+              >
+                <RefreshCw size={14} /> Refresh
+              </button>
+              {reports.length > 0 && (
+                <button
+                  onClick={clearAllReports}
+                  className="flex items-center gap-2 bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-100 transition"
+                >
+                  <Trash2 size={14} /> Clear All Reports
+                </button>
+              )}
+            </div>
+          </div>
+
+          {reportsMsg && (
+            <div className={`flex items-center gap-2 rounded-lg px-4 py-3 mb-4 text-sm ${
+              reportsMsg.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'
+            }`}>
+              {reportsMsg.type === 'success' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
+              {reportsMsg.text}
+            </div>
+          )}
+
+          {reportsLoading ? (
+            <div className="text-center text-gray-400 py-12">Loading reports…</div>
+          ) : reports.length === 0 ? (
+            <div className="text-center text-gray-400 py-12 bg-white rounded-xl border">No disease reports yet.</div>
+          ) : (
+            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 text-gray-500 text-xs uppercase">
+                    <tr>
+                      <th className="text-left px-4 py-3">ID</th>
+                      <th className="text-left px-4 py-3">Crop</th>
+                      <th className="text-left px-4 py-3">Disease</th>
+                      <th className="text-left px-4 py-3">Location</th>
+                      <th className="text-left px-4 py-3">Severity</th>
+                      <th className="text-left px-4 py-3">Date</th>
+                      <th className="px-4 py-3"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y">
+                    {[...reports].reverse().map(r => (
+                      <tr key={r.id} className="hover:bg-gray-50">
+                        <td className="px-4 py-3 text-gray-400">#{r.id}</td>
+                        <td className="px-4 py-3 font-medium text-gray-800">{r.crop}</td>
+                        <td className="px-4 py-3 text-gray-600">{r.disease}</td>
+                        <td className="px-4 py-3 text-gray-600 max-w-[220px] truncate" title={r.location_name}>{r.location_name || '—'}</td>
+                        <td className="px-4 py-3 text-gray-600">{r.severity || '—'}</td>
+                        <td className="px-4 py-3 text-gray-400 text-xs">
+                          {r.timestamp ? new Date(r.timestamp).toLocaleDateString() : '—'}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <button
+                            onClick={() => deleteReport(r.id)}
+                            disabled={deletingId === r.id}
+                            className="text-red-400 hover:text-red-600 disabled:opacity-40"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
