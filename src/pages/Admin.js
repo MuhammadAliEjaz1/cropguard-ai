@@ -41,16 +41,27 @@ export default function Admin() {
     })();
   }, [authed]);
 
-  const tryLogin = () => {
-    // The password itself is verified server-side on save — this is just
-    // a local gate so you don't need to remember it for read-only viewing.
-    // Real enforcement happens in the backend on every save.
+  const [authChecking, setAuthChecking] = useState(false);
+
+  const tryLogin = async () => {
     if (password.trim().length === 0) {
       setAuthError('Enter the admin password.');
       return;
     }
-    setAuthed(true);
+    setAuthChecking(true);
     setAuthError('');
+    try {
+      await axios.post(`${API_URL}/admin/verify`, { password });
+      setAuthed(true);
+    } catch (e) {
+      if (e.response?.status === 401) {
+        setAuthError('Incorrect password.');
+      } else {
+        setAuthError('Could not reach the server to verify — check your connection.');
+      }
+    } finally {
+      setAuthChecking(false);
+    }
   };
 
   const updateCropField = (crop, path, value) => {
@@ -146,9 +157,10 @@ export default function Admin() {
           {authError && <p className="text-red-500 text-xs mb-3">{authError}</p>}
           <button
             onClick={tryLogin}
-            className="w-full bg-green-600 text-white rounded-lg py-2.5 font-semibold hover:bg-green-700 transition"
+            disabled={authChecking}
+            className="w-full bg-green-600 text-white rounded-lg py-2.5 font-semibold hover:bg-green-700 transition disabled:opacity-50"
           >
-            Continue
+            {authChecking ? 'Verifying…' : 'Continue'}
           </button>
         </div>
       </div>
