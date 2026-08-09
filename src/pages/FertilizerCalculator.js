@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Calculator, Leaf, Sprout } from 'lucide-react';
+import { API_URL } from '../config';
 
-const fertilizerData = {
+// Fallback data — used only if the live backend data can't be reached.
+// The admin panel (/admin) edits the live version on the server.
+const defaultFertilizerData = {
   Wheat: {
     emoji: '🌾',
     urdu: 'گندم',
@@ -298,7 +302,6 @@ const fertilizerData = {
   },
 };
 
-const crops   = Object.keys(fertilizerData);
 const typeColors = {
   Fungicide:   'bg-blue-100 text-blue-700',
   Insecticide: 'bg-red-100 text-red-700',
@@ -325,10 +328,29 @@ const sprayCostForAcres = (spray, acres) => {
 };
 
 function FertilizerCalculator() {
+  const [fertilizerData, setFertilizerData] = useState(defaultFertilizerData);
+  const [dataLoading, setDataLoading] = useState(true);
   const [selectedCrop, setSelectedCrop] = useState('Wheat');
   const [acres, setAcres]               = useState('');
   const [result, setResult]             = useState(null);
   const [activeTab, setActiveTab]       = useState('fertilizer');
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get(`${API_URL}/fertilizer-data`);
+        if (res.data && Object.keys(res.data).length > 0) {
+          setFertilizerData(res.data);
+        }
+      } catch {
+        // Backend unreachable — silently keep using the bundled default data.
+      } finally {
+        setDataLoading(false);
+      }
+    })();
+  }, []);
+
+  const crops = Object.keys(fertilizerData);
 
   const calculate = () => {
     const a = parseFloat(acres);
@@ -360,7 +382,7 @@ function FertilizerCalculator() {
         <p className="mt-1" style={{ color: '#86EFAC' }}>کھاد کی مقدار اور فصل کے لیے مناسب سپرے معلوم کریں</p>
         <div className="inline-flex items-center gap-2 mt-4 px-4 py-1.5 rounded-full text-xs font-semibold"
              style={{ background: 'rgba(255,255,255,0.12)', color: '#dcfce7', border: '1px solid rgba(255,255,255,0.2)' }}>
-          💰 14 crops · Live 2026 fertilizer rates
+          💰 {crops.length} crops · {dataLoading ? 'Loading latest rates…' : 'Live rates'}
         </div>
       </div>
 
