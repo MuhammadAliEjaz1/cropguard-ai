@@ -10,6 +10,7 @@ import FertilizerCalculator from './pages/FertilizerCalculator';
 import DiseaseMap from './pages/DiseaseMap';
 import Weather from './pages/Weather';
 import PestIdentifier from './pages/PestIdentifier';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/fertilizer" element={<FertilizerCalculator />} />
           <Route path="/map" element={<DiseaseMap />} />
           <Route path="/weather" element={<Weather />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </div>
     </Router>
