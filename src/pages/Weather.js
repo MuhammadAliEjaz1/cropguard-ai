@@ -218,8 +218,7 @@ export default function Weather() {
   };
 
   // Try the browser's GPS location. On failure, explain WHY (not just silently
-  // fall back) and show Lahore instead. Reused for both the auto-attempt on
-  // load and the manual "Use My Location" retry button.
+  // fall back) and show Lahore instead.
   const detectLocation = () => {
     if (!navigator.geolocation) {
       setLocationNote('Your browser doesn\'t support location detection — showing Lahore. / آپ کا براؤزر مقام کا پتہ نہیں لگا سکتا — لاہور دکھایا جا رہا ہے۔');
@@ -352,17 +351,6 @@ export default function Weather() {
 
         {/* Quick chips */}
         <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
-          <button onClick={detectLocation}
-            disabled={loading}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 6,
-              background: 'rgba(255,255,255,0.22)', border: '1px solid rgba(255,255,255,0.35)',
-              borderRadius: 20, padding: '5px 14px', color: '#fff', fontSize: 13, fontWeight: 600,
-              cursor: loading ? 'default' : 'pointer', opacity: loading ? 0.6 : 1,
-            }}
-          >
-            📍 Use My Location
-          </button>
           {pakistanCities.slice(0, 9).map(c => (
             <button key={c} onClick={() => { setQuery(c); search(c); }}
               style={{
