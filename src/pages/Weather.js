@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // ─── Open-Meteo Geocoding + Forecast — NO API KEY NEEDED ───────────────────
 
@@ -177,6 +177,68 @@ export default function Weather() {
     }
   };
 
+  // Free, no-key reverse geocoding — turns GPS coordinates into a place name
+  const reverseGeocode = async (lat, lon) => {
+    try {
+      const res  = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
+      const json = await res.json();
+      return {
+        name:   json.city || json.locality || 'Your Location',
+        admin1: json.principalSubdivision || '',
+      };
+    } catch {
+      return { name: 'Your Location', admin1: '' };
+    }
+  };
+
+  // Load weather directly from GPS coordinates (used for the auto-detected location)
+  const loadByCoords = async (lat, lon, name, admin1) => {
+    setLoading(true);
+    setError('');
+    setWeather(null);
+    try {
+      const forecast = await fetchForecast(lat, lon, 'auto'); // 'auto' → Open-Meteo detects the correct timezone
+      const geo = {
+        name: name || 'Your Location',
+        admin1: admin1 || '',
+        latitude: lat,
+        longitude: lon,
+        timezone: forecast.timezone,
+        elevation: forecast.elevation,
+      };
+      setWeather({ geo, forecast });
+      setActiveTab('today');
+    } catch (e) {
+      setError('Could not load weather for your location. / آپ کے مقام کا موسم لوڈ نہیں ہو سکا۔');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // On first load: try the browser's GPS location, fall back to Lahore if
+  // it's denied, unavailable, or times out. This is what makes the page show
+  // real weather immediately instead of an empty "search a city" screen.
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      search('Lahore');
+      return;
+    }
+    setLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        const place = await reverseGeocode(latitude, longitude);
+        loadByCoords(latitude, longitude, place.name, place.admin1);
+      },
+      () => {
+        // Permission denied, unavailable, or timed out — fall back to a sensible default.
+        search('Lahore');
+      },
+      { timeout: 8000, maximumAge: 10 * 60 * 1000 }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleInput = async (val) => {
     setQuery(val);
     if (val.length < 2) { setSuggestions([]); return; }
@@ -285,6 +347,15 @@ export default function Weather() {
           ))}
         </div>
       </div>
+
+      {/* Loading */}
+      {loading && !weather && (
+        <div style={{ textAlign: 'center', padding: '80px 20px', opacity: 0.75 }}>
+          <div style={{ fontSize: 60, marginBottom: 16 }}>📍</div>
+          <p style={{ fontSize: 18, fontWeight: 300 }}>Detecting your location…</p>
+          <p style={{ fontSize: 15, marginTop: 6, direction: 'rtl' }}>آپ کا مقام معلوم کیا جا رہا ہے…</p>
+        </div>
+      )}
 
       {/* Error */}
       {error && (
