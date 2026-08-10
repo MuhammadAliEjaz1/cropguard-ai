@@ -129,6 +129,7 @@ export default function Weather() {
   const [loading,    setLoading]    = useState(false);
   const [error,      setError]      = useState('');
   const [activeTab,  setActiveTab]  = useState('today');
+  const [locationNote, setLocationNote] = useState(null);
 
   const geocode = async (cityName) => {
     const res  = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=5&language=en&format=json`);
@@ -208,6 +209,7 @@ export default function Weather() {
       };
       setWeather({ geo, forecast });
       setActiveTab('today');
+      setLocationNote(null);
     } catch (e) {
       setError('Could not load weather for your location. / آپ کے مقام کا موسم لوڈ نہیں ہو سکا۔');
     } finally {
@@ -215,27 +217,42 @@ export default function Weather() {
     }
   };
 
-  // On first load: try the browser's GPS location, fall back to Lahore if
-  // it's denied, unavailable, or times out. This is what makes the page show
-  // real weather immediately instead of an empty "search a city" screen.
-  useEffect(() => {
+  // Try the browser's GPS location. On failure, explain WHY (not just silently
+  // fall back) and show Lahore instead. Reused for both the auto-attempt on
+  // load and the manual "Use My Location" retry button.
+  const detectLocation = () => {
     if (!navigator.geolocation) {
+      setLocationNote('Your browser doesn\'t support location detection — showing Lahore. / آپ کا براؤزر مقام کا پتہ نہیں لگا سکتا — لاہور دکھایا جا رہا ہے۔');
       search('Lahore');
       return;
     }
     setLoading(true);
+    setLocationNote(null);
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const { latitude, longitude } = pos.coords;
         const place = await reverseGeocode(latitude, longitude);
         loadByCoords(latitude, longitude, place.name, place.admin1);
       },
-      () => {
-        // Permission denied, unavailable, or timed out — fall back to a sensible default.
+      (err) => {
+        let msg = 'Could not detect your location — showing Lahore instead. / آپ کا مقام معلوم نہیں ہو سکا — لاہور دکھایا جا رہا ہے۔';
+        if (err.code === err.PERMISSION_DENIED) {
+          msg = 'Location permission was denied — showing Lahore. Allow location access in your browser settings and try again. / مقام کی اجازت نہیں دی گئی — لاہور دکھایا جا رہا ہے۔';
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          msg = 'Location services seem to be off on your device — showing Lahore. Turn on Location in your system settings and try again. / آپ کے آلے میں لوکیشن بند ہے — لاہور دکھایا جا رہا ہے۔';
+        } else if (err.code === err.TIMEOUT) {
+          msg = 'Location detection timed out — showing Lahore. Try again if you\'re on a slow connection. / مقام معلوم کرنے میں وقت لگ گیا — لاہور دکھایا جا رہا ہے۔';
+        }
+        setLocationNote(msg);
         search('Lahore');
       },
       { timeout: 8000, maximumAge: 10 * 60 * 1000 }
     );
+  };
+
+  // Attempt GPS detection automatically on first load.
+  useEffect(() => {
+    detectLocation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -335,6 +352,17 @@ export default function Weather() {
 
         {/* Quick chips */}
         <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
+          <button onClick={detectLocation}
+            disabled={loading}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              background: 'rgba(255,255,255,0.22)', border: '1px solid rgba(255,255,255,0.35)',
+              borderRadius: 20, padding: '5px 14px', color: '#fff', fontSize: 13, fontWeight: 600,
+              cursor: loading ? 'default' : 'pointer', opacity: loading ? 0.6 : 1,
+            }}
+          >
+            📍 Use My Location
+          </button>
           {pakistanCities.slice(0, 9).map(c => (
             <button key={c} onClick={() => { setQuery(c); search(c); }}
               style={{
@@ -346,6 +374,21 @@ export default function Weather() {
             >{c}</button>
           ))}
         </div>
+
+        {/* Location fallback explanation */}
+        {locationNote && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 10, marginTop: 12,
+            background: 'rgba(255,193,7,0.15)', border: '1px solid rgba(255,193,7,0.4)',
+            borderRadius: 12, padding: '10px 16px', fontSize: 13,
+          }}>
+            <span>⚠️</span>
+            <span style={{ flex: 1 }}>{locationNote}</span>
+            <button onClick={() => setLocationNote(null)}
+              style={{ background: 'none', border: 'none', color: '#fff', opacity: 0.7, cursor: 'pointer', fontSize: 16, lineHeight: 1 }}
+            >×</button>
+          </div>
+        )}
       </div>
 
       {/* Loading */}
