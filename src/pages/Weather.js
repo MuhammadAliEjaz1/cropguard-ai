@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Capacitor } from '@capacitor/core';
+import { Geolocation } from '@capacitor/geolocation';
 
 // ─── Open-Meteo Geocoding + Forecast — NO API KEY NEEDED ───────────────────
 
@@ -217,36 +219,36 @@ export default function Weather() {
     }
   };
 
-  // Try the browser's GPS location. On failure, explain WHY (not just silently
-  // fall back) and show Lahore instead.
-  const detectLocation = () => {
-    if (!navigator.geolocation) {
-      setLocationNote('Your browser doesn\'t support location detection — showing Lahore. / آپ کا براؤزر مقام کا پتہ نہیں لگا سکتا — لاہور دکھایا جا رہا ہے۔');
-      search('Lahore');
-      return;
-    }
+  // Detect location via Capacitor's Geolocation plugin — works on both the
+  // website (falls back to the browser API automatically) and the native
+  // Android app (properly triggers the real OS permission dialog there).
+  // On failure, explain WHY (not just silently fall back) and show Lahore.
+  const detectLocation = async () => {
     setLoading(true);
     setLocationNote(null);
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        const { latitude, longitude } = pos.coords;
-        const place = await reverseGeocode(latitude, longitude);
-        loadByCoords(latitude, longitude, place.name, place.admin1);
-      },
-      (err) => {
-        let msg = 'Could not detect your location — showing Lahore instead. / آپ کا مقام معلوم نہیں ہو سکا — لاہور دکھایا جا رہا ہے۔';
-        if (err.code === err.PERMISSION_DENIED) {
-          msg = 'Location permission was denied — showing Lahore. Allow location access in your browser settings and try again. / مقام کی اجازت نہیں دی گئی — لاہور دکھایا جا رہا ہے۔';
-        } else if (err.code === err.POSITION_UNAVAILABLE) {
-          msg = 'Location services seem to be off on your device — showing Lahore. Turn on Location in your system settings and try again. / آپ کے آلے میں لوکیشن بند ہے — لاہور دکھایا جا رہا ہے۔';
-        } else if (err.code === err.TIMEOUT) {
-          msg = 'Location detection timed out — showing Lahore. Try again if you\'re on a slow connection. / مقام معلوم کرنے میں وقت لگ گیا — لاہور دکھایا جا رہا ہے۔';
-        }
-        setLocationNote(msg);
-        search('Lahore');
-      },
-      { timeout: 8000, maximumAge: 10 * 60 * 1000 }
-    );
+    try {
+      // The website's first GPS fix is often a slow "cold start" (the browser
+      // has to spin up location resolution from scratch), so it gets a more
+      // forgiving timeout. The native app talks directly to Android's location
+      // system and is reliably fast, so it keeps the tighter 8s timeout.
+      const timeoutMs = Capacitor.isNativePlatform() ? 8000 : 20000;
+      const pos = await Geolocation.getCurrentPosition({ timeout: timeoutMs, maximumAge: 10 * 60 * 1000 });
+      const { latitude, longitude } = pos.coords;
+      const place = await reverseGeocode(latitude, longitude);
+      loadByCoords(latitude, longitude, place.name, place.admin1);
+    } catch (err) {
+      const text = (err && err.message ? err.message : '').toLowerCase();
+      let msg = 'Could not detect your location — showing Lahore instead. / آپ کا مقام معلوم نہیں ہو سکا — لاہور دکھایا جا رہا ہے۔';
+      if (err?.code === 1 || text.includes('denied') || text.includes('permission')) {
+        msg = 'Location permission was denied — showing Lahore. Allow location access in your settings and try again. / مقام کی اجازت نہیں دی گئی — لاہور دکھایا جا رہا ہے۔';
+      } else if (err?.code === 2 || text.includes('unavailable')) {
+        msg = 'Location services seem to be off on your device — showing Lahore. Turn on Location in your system settings and try again. / آپ کے آلے میں لوکیشن بند ہے — لاہور دکھایا جا رہا ہے۔';
+      } else if (err?.code === 3 || text.includes('timeout')) {
+        msg = 'Location detection timed out — showing Lahore. Try again if you\'re on a slow connection. / مقام معلوم کرنے میں وقت لگ گیا — لاہور دکھایا جا رہا ہے۔';
+      }
+      setLocationNote(msg);
+      search('Lahore');
+    }
   };
 
   // Attempt GPS detection automatically on first load.
