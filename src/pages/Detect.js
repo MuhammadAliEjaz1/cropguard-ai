@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 import { Upload, Loader, CheckCircle, AlertCircle, Leaf, Camera, Info, ChevronRight, X } from 'lucide-react';
 import { API_URL } from '../config';
@@ -411,16 +412,17 @@ function Detect() {
                   {showUrdu ? '🇬🇧 English' : '🇵🇰 اردو'}
                 </button>
               </div>
-              <div style={{
+              <div className="cgai-explanation" style={{
                 color: '#374151', lineHeight: '1.8', fontSize: '14px',
-                whiteSpace: 'pre-wrap',
                 fontFamily: showUrdu ? 'serif' : 'inherit',
                 direction: showUrdu ? 'rtl' : 'ltr',
                 textAlign: showUrdu ? 'right' : 'left',
               }}>
-                {showUrdu
-                  ? parseExplanation(result.explanation).urdu
-                  : parseExplanation(result.explanation).english}
+                <ReactMarkdown>
+                  {showUrdu
+                    ? parseExplanation(result.explanation).urdu
+                    : parseExplanation(result.explanation).english}
+                </ReactMarkdown>
               </div>
             </div>
 
@@ -467,6 +469,16 @@ function Detect() {
 
       <style>{`
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .cgai-explanation p { margin: 0 0 12px; }
+        .cgai-explanation p:last-child { margin-bottom: 0; }
+        .cgai-explanation strong { font-weight: 700; color: #14532d; }
+        .cgai-explanation ul, .cgai-explanation ol { margin: 4px 0 12px; padding-inline-start: 24px; }
+        .cgai-explanation li { margin-bottom: 5px; }
+        .cgai-explanation h1, .cgai-explanation h2, .cgai-explanation h3 {
+          font-size: 15px; font-weight: 800; color: #14532d; margin: 14px 0 6px;
+        }
+        .cgai-explanation h1:first-child, .cgai-explanation h2:first-child, .cgai-explanation h3:first-child { margin-top: 0; }
+        .cgai-explanation hr { border: none; border-top: 1px solid #e5e7eb; margin: 14px 0; }
       `}</style>
     </div>
   );
