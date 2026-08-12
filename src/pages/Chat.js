@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 import { Send, Leaf, Loader2, ChevronRight, Sprout, Droplets, Bug, Wheat, Sun, FlaskConical } from 'lucide-react';
 import { API_URL } from '../config';
@@ -82,7 +83,7 @@ function Message({ msg, isNew }) {
     <div className={`cgai-msg-row ${isUser ? 'cgai-row-user' : 'cgai-row-ai'} ${isNew ? 'cgai-anim' : ''}`}>
       {!isUser && <AIAvatar />}
       <div className={`cgai-bubble ${isUser ? 'cgai-bubble-user' : 'cgai-bubble-ai'}`}>
-        {msg.content}
+        {isUser ? msg.content : <ReactMarkdown>{msg.content}</ReactMarkdown>}
       </div>
       {isUser && <div className="cgai-avatar cgai-avatar-user"><span>You</span></div>}
     </div>
@@ -278,7 +279,8 @@ export default function Chat() {
           max-width: 74%;
           padding: 11px 15px;
           font-size: 0.865rem; line-height: 1.65;
-          white-space: pre-wrap; word-break: break-word;
+          word-break: break-word;
+          unicode-bidi: plaintext; /* lets Urdu sections flow RTL automatically, English stays LTR */
         }
         .cgai-bubble-ai {
           background: #fff;
@@ -287,11 +289,22 @@ export default function Chat() {
           border: 1.5px solid #e2f5e9;
           box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 0 0 0 transparent;
         }
+        .cgai-bubble-ai p { margin: 0 0 10px; }
+        .cgai-bubble-ai p:last-child { margin-bottom: 0; }
+        .cgai-bubble-ai strong { font-weight: 700; color: #14532d; }
+        .cgai-bubble-ai ul, .cgai-bubble-ai ol { margin: 4px 0 10px; padding-left: 22px; }
+        .cgai-bubble-ai li { margin-bottom: 4px; }
+        .cgai-bubble-ai h1, .cgai-bubble-ai h2, .cgai-bubble-ai h3 {
+          font-size: 0.95rem; font-weight: 700; color: #14532d; margin: 12px 0 6px;
+        }
+        .cgai-bubble-ai h1:first-child, .cgai-bubble-ai h2:first-child, .cgai-bubble-ai h3:first-child { margin-top: 0; }
+        .cgai-bubble-ai hr { border: none; border-top: 1px solid #e5e7eb; margin: 12px 0; }
         .cgai-bubble-user {
           background: linear-gradient(135deg, #15803d 0%, #16a34a 100%);
           color: #fff;
           border-radius: 16px 3px 16px 16px;
           box-shadow: 0 2px 10px rgba(21,128,61,.28);
+          white-space: pre-wrap;
         }
 
         /* WELCOME CARD */
