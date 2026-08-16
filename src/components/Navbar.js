@@ -15,6 +15,7 @@ function Navbar() {
     { path: '/fertilizer', label: 'Fertilizer Calc' },
     { path: '/map', label: 'Disease Map' },
     { path: '/weather', label: 'Weather' },
+    { path: '/mandi-rates', label: 'Mandi Rates' },
     { path: '/analytics', label: 'Insights' },
     { path: '/about',   label: 'About' },
   ];
