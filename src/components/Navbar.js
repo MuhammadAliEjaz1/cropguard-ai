@@ -8,8 +8,8 @@ function Navbar() {
   const moreRef = useRef(null);
   const location = useLocation();
 
-  // Core tools stay inline. Everything else lives under "More" so the bar
-  // doesn't wrap into a messy multi-line header as pages keep getting added.
+  // Only About is tucked away — everything else farmers actually use daily
+  // stays inline, since there's room for it at the normal font size.
   const mainLinks = [
     { path: '/',        label: 'Home' },
     { path: '/detect',  label: 'Detect Disease' },
@@ -18,12 +18,12 @@ function Navbar() {
     { path: '/calendar', label: 'Crop Calendar' },
     { path: '/fertilizer', label: 'Fertilizer Calc' },
     { path: '/map', label: 'Disease Map' },
-  ];
-
-  const moreLinks = [
     { path: '/weather', label: 'Weather' },
     { path: '/mandi-rates', label: 'Mandi Rates' },
     { path: '/analytics', label: 'Insights' },
+  ];
+
+  const moreLinks = [
     { path: '/about',   label: 'About' },
   ];
 
@@ -41,14 +41,14 @@ function Navbar() {
 
   return (
     <nav className="bg-green-700 text-white shadow-lg relative">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2 text-xl font-bold flex-shrink-0">
           <Leaf size={24} />
           CropGuard AI
         </Link>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-5">
           {mainLinks.map(l => (
             <Link
               key={l.path}
