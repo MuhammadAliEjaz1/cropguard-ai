@@ -48,7 +48,7 @@ function Navbar() {
         </Link>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-5 text-sm">
+        <div className="hidden md:flex items-center gap-6">
           {mainLinks.map(l => (
             <Link
               key={l.path}
