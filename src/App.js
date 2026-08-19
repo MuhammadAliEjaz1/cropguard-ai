@@ -12,7 +12,6 @@ import Weather from './pages/Weather';
 import PestIdentifier from './pages/PestIdentifier';
 import Admin from './pages/Admin';
 import Analytics from './pages/Analytics';
-import MandiRates from './pages/MandiRates';
 
 function App() {
   return (
@@ -31,7 +30,6 @@ function App() {
           <Route path="/weather" element={<Weather />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/analytics" element={<Analytics />} />
-          <Route path="/mandi-rates" element={<MandiRates />} />
         </Routes>
       </div>
     </Router>
