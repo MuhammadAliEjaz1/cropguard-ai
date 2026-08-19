@@ -15,7 +15,7 @@ export default function Admin() {
   const [authError, setAuthError] = useState('');
   const [authChecking, setAuthChecking] = useState(false);
 
-  const [adminTab, setAdminTab] = useState('fertilizer'); // 'fertilizer' | 'reports' | 'mandi'
+  const [adminTab, setAdminTab] = useState('fertilizer'); // 'fertilizer' | 'reports'
 
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,64 +47,6 @@ export default function Admin() {
     if (authed && adminTab === 'reports') fetchReports();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authed, adminTab]);
-
-  const [mandiData, setMandiData]       = useState(null);
-  const [mandiLoading, setMandiLoading] = useState(false);
-  const [mandiSaving, setMandiSaving]   = useState(false);
-  const [mandiMsg, setMandiMsg]         = useState(null);
-
-  const fetchMandiRates = async () => {
-    setMandiLoading(true);
-    setMandiMsg(null);
-    try {
-      const res = await axios.get(`${API_URL}/mandi-rates`);
-      setMandiData(res.data && res.data.rates ? res.data : { last_updated: '', rates: [] });
-    } catch {
-      setMandiMsg({ type: 'error', text: 'Could not load mandi rates.' });
-    } finally {
-      setMandiLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (authed && adminTab === 'mandi' && !mandiData) fetchMandiRates();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authed, adminTab]);
-
-  const updateMandiRow = (idx, field, value) => {
-    setMandiData(prev => {
-      const next = { ...prev, rates: [...prev.rates] };
-      next.rates[idx] = { ...next.rates[idx], [field]: field === 'price' ? (parseFloat(value) || 0) : value };
-      return next;
-    });
-  };
-
-  const addMandiRow = () => {
-    setMandiData(prev => ({
-      ...prev,
-      rates: [...prev.rates, { crop: 'Wheat', urdu: 'گندم', city: '', price: 0, unit: 'per 40kg' }],
-    }));
-  };
-
-  const removeMandiRow = (idx) => {
-    setMandiData(prev => ({ ...prev, rates: prev.rates.filter((_, i) => i !== idx) }));
-  };
-
-  const saveMandiRates = async () => {
-    setMandiSaving(true);
-    setMandiMsg(null);
-    try {
-      const today = new Date().toISOString().split('T')[0];
-      const payload = { ...mandiData, last_updated: today };
-      await axios.post(`${API_URL}/admin/mandi-rates`, { password, data: payload });
-      setMandiData(payload);
-      setMandiMsg({ type: 'success', text: 'Mandi rates saved and committed to the Space repo.' });
-    } catch (e) {
-      setMandiMsg({ type: 'error', text: 'Save failed: ' + (e.response?.data?.detail || e.message) });
-    } finally {
-      setMandiSaving(false);
-    }
-  };
 
   const deleteReport = async (id) => {
     if (!window.confirm(`Delete report #${id}? This cannot be undone.`)) return;
@@ -310,15 +252,6 @@ export default function Admin() {
             <Save size={16} /> {saving ? 'Saving…' : 'Save All Changes'}
           </button>
         )}
-        {adminTab === 'mandi' && (
-          <button
-            onClick={saveMandiRates}
-            disabled={mandiSaving}
-            className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
-          >
-            <Save size={16} /> {mandiSaving ? 'Saving…' : 'Save Mandi Rates'}
-          </button>
-        )}
       </div>
 
       {/* Tab switcher */}
@@ -338,14 +271,6 @@ export default function Admin() {
           }`}
         >
           Disease Reports
-        </button>
-        <button
-          onClick={() => setAdminTab('mandi')}
-          className={`px-5 py-2 rounded-lg font-medium text-sm transition ${
-            adminTab === 'mandi' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          Mandi Rates
         </button>
       </div>
 
@@ -580,95 +505,6 @@ export default function Admin() {
         </div>
       )}
 
-      {adminTab === 'mandi' && (
-        <div>
-          {mandiLoading && <div className="text-center text-gray-400 py-12">Loading mandi rates…</div>}
-
-          {mandiMsg && (
-            <div className={`flex items-center gap-2 rounded-lg px-4 py-3 mb-4 text-sm ${
-              mandiMsg.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'
-            }`}>
-              {mandiMsg.type === 'success' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
-              {mandiMsg.text}
-            </div>
-          )}
-
-          {mandiData && !mandiLoading && (
-            <>
-              <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-                <p className="text-sm text-gray-500">
-                  Last updated: <span className="font-medium text-gray-700">{mandiData.last_updated || 'never'}</span>
-                  {' '}— saving will set this to today automatically.
-                </p>
-                <button
-                  onClick={addMandiRow}
-                  className="flex items-center gap-1 text-xs font-medium text-green-700 hover:text-green-800"
-                >
-                  <Plus size={14} /> Add Row
-                </button>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead className="bg-gray-50 text-gray-500 text-xs uppercase">
-                      <tr>
-                        <th className="text-left px-4 py-3">Crop</th>
-                        <th className="text-left px-4 py-3">Urdu</th>
-                        <th className="text-left px-4 py-3">City</th>
-                        <th className="text-left px-4 py-3">Price (Rs)</th>
-                        <th className="text-left px-4 py-3">Unit</th>
-                        <th className="px-4 py-3"></th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y">
-                      {mandiData.rates.map((r, i) => (
-                        <tr key={i}>
-                          <td className="px-2 py-2">
-                            <input value={r.crop} onChange={e => updateMandiRow(i, 'crop', e.target.value)}
-                              className="border rounded px-2 py-1.5 text-sm w-full outline-none focus:border-green-500" />
-                          </td>
-                          <td className="px-2 py-2">
-                            <input value={r.urdu} onChange={e => updateMandiRow(i, 'urdu', e.target.value)}
-                              className="border rounded px-2 py-1.5 text-sm w-full outline-none focus:border-green-500" dir="rtl" />
-                          </td>
-                          <td className="px-2 py-2">
-                            <input value={r.city} onChange={e => updateMandiRow(i, 'city', e.target.value)}
-                              className="border rounded px-2 py-1.5 text-sm w-full outline-none focus:border-green-500" placeholder="e.g. Lahore" />
-                          </td>
-                          <td className="px-2 py-2">
-                            <input type="number" value={r.price} onChange={e => updateMandiRow(i, 'price', e.target.value)}
-                              className="border rounded px-2 py-1.5 text-sm w-28 outline-none focus:border-green-500" />
-                          </td>
-                          <td className="px-2 py-2">
-                            <input value={r.unit} onChange={e => updateMandiRow(i, 'unit', e.target.value)}
-                              className="border rounded px-2 py-1.5 text-sm w-full outline-none focus:border-green-500" placeholder="per 40kg" />
-                          </td>
-                          <td className="px-2 py-2 text-right">
-                            <button onClick={() => removeMandiRow(i)} className="text-red-400 hover:text-red-600">
-                              <Trash2 size={16} />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div className="flex justify-end mt-6">
-                <button
-                  onClick={saveMandiRates}
-                  disabled={mandiSaving}
-                  className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
-                >
-                  <Save size={16} /> {mandiSaving ? 'Saving…' : 'Save Mandi Rates'}
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      )}
     </div>
   );
 }
