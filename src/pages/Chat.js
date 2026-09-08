@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
-import axios from 'axios';
 import { Send, Leaf, Loader2, ChevronRight, Sprout, Droplets, Bug, Wheat, Sun, FlaskConical } from 'lucide-react';
 import { API_URL } from '../config';
 import { useLocation } from 'react-router-dom';
@@ -122,44 +121,99 @@ export default function Chat() {
     setNewIdx(messages.length);
     setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
     setLoading(true);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout, same as before
+
     try {
       const history = messages
         .filter(m => m.content !== '__welcome__')
         .map(m => ({ role: m.role, content: m.content }));
 
-      const res = await axios.post(
-        `${API_URL}/chat`,
-        { message: userMsg, crop, disease, chat_history: history },
-        { timeout: 60000 }  // ← 60 second timeout (model rotation can take ~10s)
-      );
+      const res = await fetch(`${API_URL}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsg, crop, disease, chat_history: history }),
+        signal: controller.signal,
+      });
 
-      // ── FIXED: handle both res.data.response and res.data.result ──
-      const reply = res.data.response || res.data.result || res.data.message;
+      clearTimeout(timeoutId);
 
-      if (!reply) {
-        // Backend returned 200 but empty/unexpected shape — log it
-        console.error('Unexpected API response shape:', res.data);
-        throw new Error('Empty response from server');
+      if (!res.ok) {
+        // Try to read a JSON error body (FastAPI's HTTPException shape); fall
+        // back to a generic message if the body isn't JSON.
+        let detail = '';
+        try {
+          const errBody = await res.json();
+          detail = errBody.detail || '';
+        } catch { /* body wasn't JSON — ignore */ }
+
+        if (res.status === 500) {
+          throw new Error('SERVER_ERROR: ' + detail);
+        } else if (res.status === 429) {
+          throw new Error('RATE_LIMIT: ' + detail);
+        }
+        throw new Error('HTTP_' + res.status + ': ' + detail);
       }
 
-      setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
+      // Add an empty assistant message now, then fill it in as chunks arrive —
+      // this is what actually makes the response feel like it's streaming.
       setNewIdx(nextAiIdx);
-    } catch (err) {
-      // Log the real error so you can debug in browser console
-      console.error('Chat error:', err?.response?.data || err?.message || err);
+      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+      setLoading(false); // stop the typing-dots indicator now that text has started
 
-      const status = err?.response?.status;
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        fullText += decoder.decode(value, { stream: true });
+        setMessages(prev => {
+          const updated = [...prev];
+          updated[updated.length - 1] = { role: 'assistant', content: fullText };
+          return updated;
+        });
+      }
+
+      if (!fullText.trim()) {
+        // Stream completed but produced nothing — treat as an error rather
+        // than leaving an empty bubble.
+        setMessages(prev => {
+          const updated = [...prev];
+          updated[updated.length - 1] = {
+            role: 'assistant',
+            content: 'معذرت، کچھ غلطی ہوئی۔ دوبارہ کوشش کریں۔\n\nSorry, something went wrong. Please try again.',
+          };
+          return updated;
+        });
+      }
+    } catch (err) {
+      clearTimeout(timeoutId);
+      console.error('Chat error:', err?.message || err);
+
       let errorMsg = 'معذرت، کچھ غلطی ہوئی۔ دوبارہ کوشش کریں۔\n\nSorry, something went wrong. Please try again.';
 
-      if (status === 500) {
-        errorMsg = 'سرور میں خرابی ہے۔ تھوڑی دیر بعد کوشش کریں۔\n\nServer error. Please try again in a moment.';
-      } else if (status === 429) {
-        errorMsg = 'بہت زیادہ سوالات ہو گئے۔ ایک منٹ بعد کوشش کریں۔\n\nToo many requests. Please wait a minute and try again.';
-      } else if (err?.code === 'ECONNABORTED') {
+      if (err?.name === 'AbortError') {
         errorMsg = 'جواب آنے میں بہت دیر لگی۔ دوبارہ کوشش کریں۔\n\nRequest timed out. Please try again.';
+      } else if (err?.message?.startsWith('SERVER_ERROR')) {
+        errorMsg = 'سرور میں خرابی ہے۔ تھوڑی دیر بعد کوشش کریں۔\n\nServer error. Please try again in a moment.';
+      } else if (err?.message?.startsWith('RATE_LIMIT')) {
+        errorMsg = 'بہت زیادہ سوالات ہو گئے۔ ایک منٹ بعد کوشش کریں۔\n\nToo many requests. Please wait a minute and try again.';
       }
 
-      setMessages(prev => [...prev, { role: 'assistant', content: errorMsg }]);
+      // If we already added an empty streaming bubble before the error hit,
+      // fill that one in rather than appending a duplicate message.
+      setMessages(prev => {
+        const last = prev[prev.length - 1];
+        if (last && last.role === 'assistant' && last.content === '') {
+          const updated = [...prev];
+          updated[updated.length - 1] = { role: 'assistant', content: errorMsg };
+          return updated;
+        }
+        return [...prev, { role: 'assistant', content: errorMsg }];
+      });
     } finally {
       setLoading(false);
     }
