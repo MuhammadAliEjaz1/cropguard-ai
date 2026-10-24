@@ -23,7 +23,7 @@ const team = [
 const gaps = [
   { gap: 'Lab-only images — fail in real fields', improvement: '45,000+ real-field images across 6 Pakistani crops', icon: '🌾' },
   { gap: 'English-only output', improvement: 'Bilingual Urdu + English with natural spoken Pakistani Urdu', icon: '🗣️' },
-  { gap: 'Single model — cross-crop confusion', improvement: '6 independent per-crop models — misclassification impossible', icon: '🧠' },
+  { gap: 'Single model — cross-crop confusion', improvement: '6 independent per-crop models — no cross-crop confusion by design', icon: '🧠' },
   { gap: 'CNN diagnosis with no guidance', improvement: 'CNN detection + Gemini LLM treatment education', icon: '💊' },
   { gap: 'No disease spread awareness', improvement: 'Geo-tagged community disease warning map', icon: '🗺️' },
   { gap: 'No integrated farming platform', improvement: '7 features in one platform built for Pakistan', icon: '📱' },
@@ -45,9 +45,9 @@ const crops = [
   {
     emoji: '🌱',
     name: 'Rice',
-    accuracy: '97.97%',
+    accuracy: '97.90%',
     classes: 6,
-    images: '7,426',
+    images: '9,108',
     arch: 'EfficientNetV2S',
     sources: ['afzaalsattar (Kaggle)', 'Real field images'],
     bg: 'bg-blue-50', border: 'border-blue-200',
@@ -81,10 +81,10 @@ const crops = [
   {
     emoji: '🌽',
     name: 'Corn',
-    accuracy: '88.56%',
+    accuracy: '88.57%',
     classes: 8,
-    images: '6,395',
-    arch: 'EfficientNetB0',
+    images: '5,381',
+    arch: 'EfficientNetV2S',
     sources: ['Mendeley Seasonal Corn Leaf Disease (Bangladesh)', 'CCMT Dataset — Raw Data (Kaggle)'],
     bg: 'bg-yellow-50', border: 'border-yellow-200',
     badge: 'bg-yellow-100 text-yellow-800', dot: 'bg-yellow-400',
@@ -93,9 +93,9 @@ const crops = [
   {
     emoji: '🥔',
     name: 'Potato',
-    accuracy: '93.21%',
-    classes: 9,
-    images: '5,200+',
+    accuracy: '92.82%',
+    classes: 8,
+    images: '5,228',
     arch: 'EfficientNetV2S',
     sources: ['faysalmiah1721758 (Kaggle)', 'Real-field images merged with PlantVillage'],
     bg: 'bg-orange-50', border: 'border-orange-200',
@@ -107,9 +107,9 @@ const crops = [
 const tech = [
   { label: 'Architecture', value: 'EfficientNetB0 + EfficientNetV2S (Transfer Learning)', icon: <Cpu size={16} /> },
   { label: 'Models', value: '6 independent per-crop CNN models', icon: <Zap size={16} /> },
-  { label: 'Disease Classes', value: '51 disease classes across 6 crops', icon: <FlaskConical size={16} /> },
+  { label: 'Disease Classes', value: '47 disease classes across 6 crops', icon: <FlaskConical size={16} /> },
   { label: 'Training Images', value: '45,000+ real-field images', icon: <Database size={16} /> },
-  { label: 'Average Accuracy', value: '94.3% across all 6 crops', icon: <Shield size={16} /> },
+  { label: 'Average Accuracy', value: '94.3% mean validation accuracy across 6 crops', icon: <Shield size={16} /> },
   { label: 'LLM', value: 'Google Gemini 2.5 Flash (bilingual)', icon: <Globe size={16} /> },
   { label: 'Backend', value: 'FastAPI · Python 3.11 · Docker', icon: <Cpu size={16} /> },
   { label: 'Frontend', value: 'React.js 18 · Tailwind CSS · Vercel', icon: <Globe size={16} /> },
@@ -162,19 +162,19 @@ function About() {
         </div>
         <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">About CropGuard AI</h1>
         <p className="text-gray-500 mt-3 text-lg max-w-2xl mx-auto leading-relaxed">
-          Pakistan's first bilingual AI crop disease detection platform —
-          6 independently trained models, 51 disease classes, 94.3% average accuracy.
+          A bilingual (Urdu/English) AI crop disease detection platform —
+          6 independently trained models, 47 disease classes, 94.3% mean validation accuracy.
         </p>
         <p className="text-green-600 mt-2 text-base">
-          پاکستانی کسانوں کے لیے پہلا اردو-انگریزی AI زرعی نظام
+          پاکستانی کسانوں کے لیے اردو-انگریزی AI زرعی نظام
         </p>
       </div>
 
       {/* STATS BAR */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {[
-          { value: '94.3%', label: 'Avg Accuracy', sub: 'اوسط درستگی' },
-          { value: '51', label: 'Disease Classes', sub: 'بیماریوں کی اقسام' },
+          { value: '94.3%', label: 'Avg Val. Accuracy', sub: 'اوسط درستگی' },
+          { value: '47', label: 'Disease Classes', sub: 'بیماریوں کی اقسام' },
           { value: '6', label: 'Crops Covered', sub: 'فصلیں' },
           { value: '45K+', label: 'Training Images', sub: 'تربیتی تصاویر' },
         ].map((s, i) => (
@@ -191,8 +191,8 @@ function About() {
         <div className="relative pl-5 border-l-2 border-green-200 space-y-4 text-gray-600 leading-relaxed">
           <p>
             Pakistan's agriculture sector employs over{' '}
-            <span className="font-semibold text-gray-800">42% of the labor force</span> and contributes
-            24% to GDP — yet farmers lose 20–30% of their yield every season to crop diseases.
+            <span className="font-semibold text-gray-800">37% of the labor force</span> and contributes
+            23.5% to GDP (Pakistan Economic Survey 2024-25) — yet crop diseases cause heavy yield losses every season.
             Not because cures don't exist, but because diagnosis comes too late and advice arrives
             only in English.
           </p>
@@ -200,7 +200,7 @@ function About() {
             We built CropGuard AI to close that gap. Instead of a single model covering all crops,
             we trained{' '}
             <span className="font-semibold text-gray-800">6 independent per-crop CNN models</span> —
-            eliminating cross-crop misclassification by design. A farmer selects their crop,
+            so one crop's model never mixes up another crop's diseases. A farmer selects their crop,
             uploads a leaf photo, and receives an instant diagnosis with bilingual Urdu treatment
             guidance specific to Pakistani pesticide brands and regional conditions.
           </p>
@@ -287,6 +287,10 @@ function About() {
           comparison, and cleaned of corrupt files before training. Lab-condition (PlantVillage-style)
           images were replaced with real-field alternatives wherever possible.
         </p>
+        <p className="text-gray-500 text-sm mb-5 leading-relaxed">
+          Accuracy figures are measured on validation splits of these curated datasets,
+          not on independent field photos, so real-world performance may be lower.
+        </p>
         <div className="grid sm:grid-cols-2 gap-4">
           {crops.map((c, i) => (
             <div key={i} className={`rounded-xl border ${c.border} ${c.bg} p-5 hover:shadow-md transition-shadow`}>
@@ -309,7 +313,7 @@ function About() {
                 {/* accuracy badge */}
                 <div className="text-right shrink-0">
                   <div className={`text-xl font-extrabold ${c.accent}`}>{c.accuracy}</div>
-                  <div className="text-xs text-gray-400">accuracy</div>
+                  <div className="text-xs text-gray-400">val. accuracy</div>
                 </div>
               </div>
               {/* architecture */}
