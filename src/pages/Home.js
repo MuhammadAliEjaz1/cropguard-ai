@@ -128,7 +128,7 @@ export default function Home() {
 
   const stats = [
     { value: '94.3',  suffix: '%', label: 'Average Accuracy',   urdu: 'اوسط درستگی'         },
-    { value: '51',    suffix: '',  label: 'Disease Classes',     urdu: 'بیماریوں کی اقسام'    },
+    { value: '47',    suffix: '',  label: 'Disease Classes',     urdu: 'بیماریوں کی اقسام'    },
     { value: '6',     suffix: '',  label: 'Crops Supported',     urdu: 'معاون فصلیں'          },
     { value: '45000', suffix: '+', label: 'Training Images',     urdu: 'تربیتی تصاویر'        },
   ];
@@ -181,10 +181,10 @@ export default function Home() {
   const crops = [
     { emoji: '🌾', en: 'Wheat',     ur: 'گندم',  acc: '90.44%' },
     { emoji: '🌱', en: 'Rice',      ur: 'چاول',  acc: '97.90%' },
-    { emoji: '☁️', en: 'Cotton',    ur: 'کپاس',  acc: '97.30%' },
-    { emoji: '🎋', en: 'Sugarcane', ur: 'گنا',   acc: '98.20%' },
-    { emoji: '🌽', en: 'Corn',      ur: 'مکئی',  acc: '88.50%' },
-    { emoji: '🥔', en: 'Potato',    ur: 'آلو',   acc: '93.21%' },
+    { emoji: '☁️', en: 'Cotton',    ur: 'کپاس',  acc: '98.88%' },
+    { emoji: '🎋', en: 'Sugarcane', ur: 'گنا',   acc: '97.33%' },
+    { emoji: '🌽', en: 'Corn',      ur: 'مکئی',  acc: '88.57%' },
+    { emoji: '🥔', en: 'Potato',    ur: 'آلو',   acc: '92.82%' },
   ];
 
   return (
@@ -346,7 +346,7 @@ export default function Home() {
               Supported Crops & Accuracy
             </h2>
             <p style={{ color: '#6B7280', fontSize: 14 }}>
-              Individually trained models for each crop
+              Individually trained models for each crop (validation accuracy)
             </p>
             <p style={{ color: '#9CA3AF', fontSize: 13, fontFamily: 'serif', direction: 'rtl' }}>
               ہر فصل کے لیے الگ تربیت یافتہ ماڈل
