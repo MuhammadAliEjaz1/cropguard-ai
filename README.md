@@ -19,17 +19,17 @@ The machine learning work lives in [`notebooks/`](notebooks/): six per-crop Effi
 
 ## 📊 Model Performance
 
-Six independent per-crop models, 47 disease classes in total.
+Six independent per-crop models, 43 classes in total.
 
 | Crop | Backbone | Input | Classes | Images (train / val) | Val accuracy | Macro F1 | Weakest class (F1) |
 |---|---|---|---|---|---|---|---|
-| Wheat | EfficientNetV2-S | 384 | 15 | 14,117 (11,294 / 2,823) | 90.44% | 0.896 | Tan spot (0.706) |
-| Rice | EfficientNetV2-S | 384 | 6 | 9,108 (7,965 / 763 / 380 test) | 97.90% | 0.979 | Leaf Blast (0.960) |
-| Cotton | EfficientNet-B0 | 224 | 4 | 8,962 (7,170 / 1,792) | 98.88% | 0.989 | Healthy (0.984) |
-| Sugarcane | EfficientNet-B0 | 224 | 6 | 7,111 (5,689 / 1,422) | 97.33% | 0.975 | Mosaic (0.945) |
-| Corn | EfficientNetV2-S | 384 | 8 | 6,395 collected (4,436 / 945 after cleaning) | 88.57% | 0.917 | Leaf Blight (0.741) |
-| Potato | EfficientNetV2-S | 384 | 8 | 5,228 (4,183 / 1,045) | 92.82% | 0.905 | Nematode (0.813) |
-| **Mean of 6 models** | | | **47 total** | | **94.3%** | **0.944** | |
+| Wheat | EfficientNetV2-S | 384 | 15 | 14,154 (11,324 / 2,830) | 90.39% | 0.894 | Tan spot (0.683) |
+| Rice | EfficientNetV2-S | 384 | 6 | 9,108 (7,965 / 763 / 380 test) | 98.03% | 0.980 | Leaf Blast (0.961) |
+| Cotton | EfficientNet-B0 | 224 | 4 | 8,962 (7,170 / 1,792) | 98.83% | 0.988 | Healthy (0.983) |
+| Sugarcane | EfficientNet-B0 | 224 | 6 | 7,111 (5,689 / 1,422) | 96.41% | 0.966 | Mosaic (0.915) |
+| Corn | EfficientNetV2-S | 384 | 6 | 5,416 collected, 5,376 after cleaning (3,760 / 806 / 810 test) | 98.39% | 0.985 | Maize Chlorotic Mottle Virus (0.963) |
+| Potato | EfficientNetV2-S | 384 | 6 | 4,549 (3,640 / 909) | 95.82% | 0.950 | Fungi (0.902) |
+| **Mean of 6 models** | | | **43 total** | | **96.3%** | **0.961** | |
 
 The mean is an unweighted average of the six per-crop validation accuracies, not a single pooled test set. Per-class precision, recall and confusion matrices are in each crop's notebook.
 
@@ -41,13 +41,15 @@ The mean is an unweighted average of the six per-crop validation accuracies, not
 | Rice | 6 | Bacterial Leaf Blight, Brown Spot, Healthy Rice Leaf, Leaf Blast, Leaf scald, Sheath Blight |
 | Cotton | 4 | Bacterial Blight, Curl Virus, Fusarium Wilt, Healthy |
 | Sugarcane | 6 | Bacterial Blight, Healthy, Mosaic, Red Rot, Rust, Yellow Disease |
-| Corn | 8 | Bacterial Leaf Streak, Common Rust, Gray Leaf Spot, Healthy, Leaf Blight, Leaf Spot, Maize Chlorotic Mottle Virus, Streak Virus |
-| Potato | 8 | Bacteria, Early Blight, Fungi, Healthy, Late Blight, Nematode, Pest, Virus |
+| Corn | 6 | Bacterial Leaf Streak, Common Rust, Gray Leaf Spot, Healthy, Leaf Blight / Leaf Spot, Maize Chlorotic Mottle Virus |
+| Potato | 6 | Bacteria, Early Blight, Fungi, Healthy, Late Blight, Virus |
 
 ### Limitations
 
-- **Validation, not independent test.** Accuracy is measured on a validation split of the same curated data. Only the rice model has a separate held-out test split (380 images). A test on photos from sources the models never saw is still pending, and real-field accuracy may be lower.
-- **Weak spots.** Wheat (Tan spot) and corn (Leaf Blight) have the lowest per-class F1 and are the least reliable diagnoses.
+- **Validation, not independent test.** Accuracy is measured on a validation split of the same curated data. Only the rice and corn models have a separate held-out test split (380 and 810 images). A test on photos from sources the models never saw is still pending, and real-field accuracy may be lower.
+- **Weak spots.** Wheat (Tan spot 0.683, Leaf Blight 0.720) and sugarcane (Mosaic, F1 0.915 with 86% recall) have the lowest per-class F1 and are the least reliable diagnoses. The corn virus class (Maize Chlorotic Mottle Virus) has only 14 test images, so its score is uncertain.
+- **Possible near-duplicate images.** The wheat, cotton, sugarcane and potato data come from several sources that were merged and split randomly. Near-identical photos (augmented copies, or several photos of the same leaf) may sit in both the training and validation splits, which can make scores look higher than they are.
+- **Single-source classes.** Some classes come from only one source (for example potato Early Blight comes only from PlantVillage), so a model may partly learn the photo style instead of the disease.
 - **The farmer picks the crop first.** Each model only knows its own crop's diseases, so a photo sent to the wrong crop's model will still return a (wrong) answer.
 
 ---
@@ -211,7 +213,7 @@ Tested on Android phones (360–414px), iPhones (375–430px), tablets, and desk
 A single unified model confused diseases across crops (for example, predicting rice leaf blight as wheat leaf blight). With per-crop models the farmer selects their crop first, and only that crop's model runs, which removes that error source. The trade-off is that a wrong crop selection gives a wrong answer.
 
 **Why real-field images over PlantVillage?**
-PlantVillage uses white-background lab photos that transfer poorly to real field conditions. The training data here comes from real field images curated across 15+ independent sources.
+PlantVillage uses white-background lab photos that transfer poorly to real field conditions. The training data here is mostly real field images curated across 15+ independent sources. Potato is the exception: it also uses the potato part of PlantVillage (lab photos), including all of its Early Blight images.
 
 **Why OpenStreetMap over Google Maps?**
 Google Maps requires billing setup. OpenStreetMap via Leaflet.js is free, has no usage limits, and includes Urdu place names for Pakistani cities.
