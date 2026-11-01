@@ -33,7 +33,7 @@ function useCounter(target, duration = 1600, start = false) {
     const t = setInterval(() => {
       step++;
       const eased = 1 - Math.pow(1 - step / steps, 3);
-      setVal(isFloat ? (eased * numeric).toFixed(2) : Math.floor(eased * numeric));
+      setVal(isFloat ? (eased * numeric).toFixed(1) : Math.floor(eased * numeric));
       if (step >= steps) clearInterval(t);
     }, interval);
     return () => clearInterval(t);
@@ -116,6 +116,24 @@ function FeatureCard({ icon, title, titleUr, desc, descUr, to, accent, delay, in
   );
 }
 
+/* ─── Disclaimer note ────────────────────────────────── */
+function Disclaimer() {
+  return (
+    <div style={{
+      maxWidth: 640, margin: '28px auto 0', padding: '14px 18px',
+      background: '#FEFCE8', border: '1px solid #FEF08A',
+      borderRadius: 12, textAlign: 'center',
+    }}>
+      <p style={{ margin: '0 0 4px', fontSize: 13, color: '#713F12', lineHeight: 1.6 }}>
+        AI results are a guide, not a final diagnosis. For serious problems, contact your local agriculture extension officer.
+      </p>
+      <p style={{ margin: 0, fontSize: 12.5, color: '#854D0E', fontFamily: 'serif', direction: 'rtl', lineHeight: 1.8 }}>
+        اے آئی کے نتائج رہنمائی کے لیے ہیں، حتمی تشخیص نہیں۔ سنگین مسئلے کی صورت میں اپنے مقامی زرعی توسیعی افسر سے رابطہ کریں۔
+      </p>
+    </div>
+  );
+}
+
 /* ─── Main Component ─────────────────────────────────── */
 export default function Home() {
   const [statsRef, statsInView] = useInView(0.2);
@@ -127,10 +145,10 @@ export default function Home() {
   useEffect(() => { setTimeout(() => setHeroVisible(true), 60); }, []);
 
   const stats = [
-    { value: '94.3',  suffix: '%', label: 'Average Accuracy',   urdu: 'اوسط درستگی'         },
-    { value: '47',    suffix: '',  label: 'Disease Classes',     urdu: 'بیماریوں کی اقسام'    },
-    { value: '6',     suffix: '',  label: 'Crops Supported',     urdu: 'معاون فصلیں'          },
-    { value: '45000', suffix: '+', label: 'Training Images',     urdu: 'تربیتی تصاویر'        },
+    { value: '96.3',  suffix: '%', label: 'Average Validation Accuracy', urdu: 'اوسط درستگی'          },
+    { value: '37',    suffix: '',  label: 'Diseases & Pests Detected',   urdu: 'بیماریاں اور کیڑے'    },
+    { value: '6',     suffix: '',  label: 'Crops Supported',             urdu: 'معاون فصلیں'          },
+    { value: '49000', suffix: '+', label: 'Images Used',                 urdu: 'استعمال شدہ تصاویر'   },
   ];
 
   const features = [
@@ -179,13 +197,41 @@ export default function Home() {
   ];
 
   const crops = [
-    { emoji: '🌾', en: 'Wheat',     ur: 'گندم',  acc: '90.44%' },
-    { emoji: '🌱', en: 'Rice',      ur: 'چاول',  acc: '97.90%' },
-    { emoji: '☁️', en: 'Cotton',    ur: 'کپاس',  acc: '98.88%' },
-    { emoji: '🎋', en: 'Sugarcane', ur: 'گنا',   acc: '97.33%' },
-    { emoji: '🌽', en: 'Corn',      ur: 'مکئی',  acc: '88.57%' },
-    { emoji: '🥔', en: 'Potato',    ur: 'آلو',   acc: '92.82%' },
+    {
+      emoji: '🌾', en: 'Wheat', ur: 'گندم', acc: '90.39%', pests: true,
+      diseases: ['Aphid', 'Black Rust', 'Blast', 'Brown Rust', 'Common Root Rot', 'Fusarium Head Blight',
+                 'Leaf Blight', 'Mildew', 'Mite', 'Septoria', 'Smut', 'Stem Fly', 'Tan Spot', 'Yellow Rust'],
+    },
+    {
+      emoji: '🌱', en: 'Rice', ur: 'چاول', acc: '98.03%',
+      diseases: ['Bacterial Leaf Blight', 'Brown Spot', 'Leaf Blast', 'Leaf Scald', 'Sheath Blight'],
+    },
+    {
+      emoji: '☁️', en: 'Cotton', ur: 'کپاس', acc: '98.83%',
+      diseases: ['Bacterial Blight', 'Curl Virus', 'Fusarium Wilt'],
+    },
+    {
+      emoji: '🎋', en: 'Sugarcane', ur: 'گنا', acc: '96.41%',
+      diseases: ['Bacterial Blight', 'Mosaic', 'Red Rot', 'Rust', 'Yellow Disease'],
+    },
+    {
+      emoji: '🌽', en: 'Corn', ur: 'مکئی', acc: '98.39%',
+      diseases: ['Bacterial Leaf Streak', 'Common Rust', 'Gray Leaf Spot', 'Leaf Blight / Leaf Spot',
+                 'Maize Chlorotic Mottle Virus'],
+      note: 'Leaf Blight and Leaf Spot are shown as one group.',
+    },
+    {
+      emoji: '🥔', en: 'Potato', ur: 'آلو', acc: '95.82%',
+      diseases: ['Bacteria', 'Early Blight', 'Fungi', 'Late Blight', 'Virus'],
+      note: 'Bacteria, Fungi and Virus are groups of diseases.',
+    },
   ];
+
+  // which crop cards are open (tap a card to see its diseases)
+  const [openCrops, setOpenCrops] = useState({});
+  const allOpen = crops.every((_, i) => openCrops[i]);
+  const toggleCrop = (i) => setOpenCrops(prev => ({ ...prev, [i]: !prev[i] }));
+  const toggleAll = () => setOpenCrops(allOpen ? {} : Object.fromEntries(crops.map((_, i) => [i, true])));
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: '#FAFAF8' }}>
@@ -282,19 +328,190 @@ export default function Home() {
           </div>
 
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, marginTop: 28, letterSpacing: '0.06em' }}>
-            TRAINED ON 45,000+ REAL FIELD IMAGES
+            TRAINED ON 49,000+ IMAGES · 6 CROPS
           </p>
         </div>
       </div>
 
-      {/* ══ STATS ═════════════════════════════════════════════ */}
-      <div ref={statsRef} style={{ background: '#fff', borderBottom: '1px solid #F3F4F6' }}>
-        <div className="stats-grid" style={{ maxWidth: 860, margin: '0 auto' }}>
-          {stats.map((s, i) => (
-            <div key={i}>
-              <StatCard {...s} inView={statsInView} delay={i * 0.1} />
-            </div>
-          ))}
+      {/* ══ CROPS ═════════════════════════════════════════════ */}
+      <div ref={cropRef} style={{ background: '#fff', padding: 'clamp(48px, 8vw, 80px) 24px' }}>
+        <div style={{ maxWidth: 860, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 28 }}>
+            <h2 style={{
+              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+              fontWeight: 800, color: '#111827', margin: '0 0 8px',
+            }}>
+              Supported Crops & Diseases
+            </h2>
+            <p style={{ color: '#6B7280', fontSize: 14, margin: '0 0 4px' }}>
+              Photo scan works for 6 crops. The AI chat can answer questions about 14 crops.
+            </p>
+            <p style={{ color: '#9CA3AF', fontSize: 13, fontFamily: 'serif', direction: 'rtl', margin: 0 }}>
+              تصویر سے تشخیص 6 فصلوں کے لیے ہے، جبکہ چیٹ 14 فصلوں کے سوالات کا جواب دے سکتا ہے۔
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
+            <button
+              type="button"
+              onClick={toggleAll}
+              style={{
+                background: '#F0FDF4', color: '#166534',
+                border: '1.5px solid #BBF7D0', borderRadius: 999,
+                padding: '8px 20px', fontSize: 13, fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              {allOpen ? 'چھپائیں / Hide diseases' : 'تمام بیماریاں دکھائیں / Show all diseases'}
+            </button>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap: 12,
+            alignItems: 'start',
+          }}>
+            {crops.map((c, i) => {
+              const open = !!openCrops[i];
+              return (
+                <div key={i} style={{
+                  background: '#FAFAF8',
+                  border: `1.5px solid ${open ? '#86EFAC' : '#E5E7EB'}`,
+                  borderRadius: 14, padding: '16px 20px',
+                  opacity: cropInView ? 1 : 0,
+                  transform: cropInView ? 'translateY(0)' : 'translateY(16px)',
+                  transition: `opacity 0.5s ease ${i * 0.07}s, transform 0.5s ease ${i * 0.07}s, border-color 0.2s ease`,
+                }}>
+                  <button
+                    type="button"
+                    onClick={() => toggleCrop(i)}
+                    aria-expanded={open}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 14,
+                      width: '100%', background: 'none', border: 'none',
+                      padding: 0, cursor: 'pointer', textAlign: 'left', font: 'inherit',
+                    }}
+                  >
+                    <span style={{ fontSize: 32, flexShrink: 0 }}>{c.emoji}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontWeight: 700, color: '#111827', fontSize: 15 }}>{c.en}</span>
+                        <span style={{
+                          background: '#F0FDF4', color: '#16A34A',
+                          border: '1px solid #BBF7D0',
+                          borderRadius: 999, padding: '2px 10px',
+                          fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap',
+                        }}>
+                          {c.diseases.length} {c.pests ? 'diseases & pests' : 'diseases'}
+                        </span>
+                      </div>
+                      <div style={{ color: '#6B7280', fontSize: 13, fontFamily: 'serif', marginTop: 2 }}>{c.ur}</div>
+                      <div style={{ color: '#9CA3AF', fontSize: 11.5, marginTop: 6 }}>
+                        Validation accuracy: {c.acc}
+                      </div>
+                    </div>
+                    <ChevronRight
+                      size={16}
+                      color="#9CA3AF"
+                      style={{ flexShrink: 0, transform: open ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease' }}
+                    />
+                  </button>
+
+                  {open && (
+                    <div style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid #E5E7EB' }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                        {c.diseases.map((d) => (
+                          <span key={d} style={{
+                            background: '#F0FDF4', color: '#166534',
+                            border: '1px solid #BBF7D0', borderRadius: 999,
+                            padding: '3px 10px', fontSize: 12, fontWeight: 600,
+                          }}>{d}</span>
+                        ))}
+                      </div>
+                      <p style={{ fontSize: 12, color: '#6B7280', margin: '10px 0 0', lineHeight: 1.5 }}>
+                        Healthy leaves are also recognised.{c.note ? ` ${c.note}` : ''}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <p style={{ textAlign: 'center', color: '#9CA3AF', fontSize: 12, margin: '16px 0 0' }}>
+            Accuracy is measured on public dataset images, not on photos from Pakistani fields.
+          </p>
+
+          <Disclaimer />
+        </div>
+      </div>
+
+      {/* ══ HOW IT WORKS ══════════════════════════════════════ */}
+      <div ref={howRef} style={{
+        background: '#F0FDF4',
+        borderTop: '1px solid #D1FAE5',
+        borderBottom: '1px solid #D1FAE5',
+        padding: 'clamp(48px, 8vw, 80px) 24px',
+      }}>
+        <div style={{ maxWidth: 860, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <h2 style={{
+              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+              fontWeight: 800, color: '#14532D', margin: '0 0 8px',
+            }}>
+              How It Works
+            </h2>
+            <p style={{ color: '#16A34A', fontSize: 13, fontFamily: 'serif', direction: 'rtl' }}>
+              یہ کیسے کام کرتا ہے
+            </p>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+            gap: 8, position: 'relative',
+          }}>
+            {[
+              { step: '1', en: 'Take a clear photo of the affected leaf', ur: 'متاثرہ پتے کی واضح تصویر لیں', icon: '📸',
+                tip: 'Tip: one leaf, good daylight, plain background', tipUr: 'ایک پتہ، اچھی روشنی، سادہ پس منظر' },
+              { step: '2', en: 'Upload it to CropGuard AI',               ur: 'کراپ گارڈ پر اپلوڈ کریں',    icon: '⬆️' },
+              { step: '3', en: 'AI analyses and identifies the disease',   ur: 'اے آئی بیماری شناخت کرے گا',  icon: '🤖' },
+              { step: '4', en: 'Receive treatment advice instantly',       ur: 'فوری علاج کا مشورہ پائیں',    icon: '💊' },
+            ].map((s, i) => (
+              <div key={i} style={{
+                textAlign: 'center', padding: '24px 16px',
+                background: '#fff', borderRadius: 16,
+                border: '1.5px solid #BBF7D0',
+                opacity: howInView ? 1 : 0,
+                transform: howInView ? 'translateY(0)' : 'translateY(20px)',
+                transition: `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`,
+              }}>
+                <div style={{
+                  width: 48, height: 48, borderRadius: '50%',
+                  background: '#F0FDF4', border: '2px solid #BBF7D0',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  margin: '0 auto 14px', fontSize: 22,
+                }}>{s.icon}</div>
+                <div style={{
+                  display: 'inline-block',
+                  background: '#166534', color: '#fff',
+                  borderRadius: 999, padding: '2px 10px',
+                  fontSize: 11, fontWeight: 800,
+                  letterSpacing: '0.06em', marginBottom: 10,
+                }}>STEP {s.step}</div>
+                <p style={{ fontSize: 13.5, color: '#1F2937', fontWeight: 600, margin: '0 0 6px', lineHeight: 1.5 }}>{s.en}</p>
+                <p style={{ fontSize: 12, color: '#6B7280', margin: 0, fontFamily: 'serif', direction: 'rtl' }}>{s.ur}</p>
+                {s.tip && (
+                  <p style={{ fontSize: 12, color: '#166534', margin: '10px 0 0', lineHeight: 1.6 }}>
+                    {s.tip}
+                    <br />
+                    <span style={{ fontFamily: 'serif', direction: 'rtl', display: 'inline-block' }}>{s.tipUr}</span>
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -335,129 +552,19 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ══ CROPS ═════════════════════════════════════════════ */}
-      <div ref={cropRef} style={{ background: '#fff', padding: 'clamp(48px, 8vw, 80px) 24px' }}>
-        <div style={{ maxWidth: 860, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 36 }}>
-            <h2 style={{
-              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-              fontWeight: 800, color: '#111827', margin: '0 0 8px',
-            }}>
-              Supported Crops & Accuracy
-            </h2>
-            <p style={{ color: '#6B7280', fontSize: 14 }}>
-              Individually trained models for each crop (validation accuracy)
-            </p>
-            <p style={{ color: '#9CA3AF', fontSize: 13, fontFamily: 'serif', direction: 'rtl' }}>
-              ہر فصل کے لیے الگ تربیت یافتہ ماڈل
-            </p>
-          </div>
-
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: 12,
-          }}>
-            {crops.map((c, i) => (
-              <div key={i} style={{
-                display: 'flex', alignItems: 'center', gap: 14,
-                background: '#FAFAF8',
-                border: '1.5px solid #E5E7EB',
-                borderRadius: 14, padding: '16px 20px',
-                opacity: cropInView ? 1 : 0,
-                transform: cropInView ? 'translateY(0)' : 'translateY(16px)',
-                transition: `opacity 0.5s ease ${i * 0.07}s, transform 0.5s ease ${i * 0.07}s`,
-              }}>
-                <span style={{ fontSize: 32, flexShrink: 0 }}>{c.emoji}</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 700, color: '#111827', fontSize: 15 }}>{c.en}</span>
-                    <span style={{
-                      background: '#F0FDF4', color: '#16A34A',
-                      border: '1px solid #BBF7D0',
-                      borderRadius: 999, padding: '2px 10px',
-                      fontSize: 12, fontWeight: 700,
-                    }}>{c.acc}</span>
-                  </div>
-                  <div style={{ color: '#6B7280', fontSize: 13, fontFamily: 'serif', marginTop: 2 }}>{c.ur}</div>
-                  <div style={{
-                    height: 4, background: '#E5E7EB', borderRadius: 999, marginTop: 8,
-                  }}>
-                    <div style={{
-                      height: 4, background: '#16A34A', borderRadius: 999,
-                      width: cropInView ? c.acc : '0%',
-                      transition: `width 1s ease ${i * 0.1 + 0.3}s`,
-                    }} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ══ HOW IT WORKS ══════════════════════════════════════ */}
-      <div ref={howRef} style={{
-        background: '#F0FDF4',
-        borderTop: '1px solid #D1FAE5',
-        borderBottom: '1px solid #D1FAE5',
-        padding: 'clamp(48px, 8vw, 80px) 24px',
-      }}>
-        <div style={{ maxWidth: 860, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            <h2 style={{
-              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-              fontWeight: 800, color: '#14532D', margin: '0 0 8px',
-            }}>
-              How It Works
-            </h2>
-            <p style={{ color: '#16A34A', fontSize: 13, fontFamily: 'serif', direction: 'rtl' }}>
-              یہ کیسے کام کرتا ہے
-            </p>
-          </div>
-
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: 8, position: 'relative',
-          }}>
-            {[
-              { step: '1', en: 'Take a clear photo of the affected leaf', ur: 'متاثرہ پتے کی واضح تصویر لیں', icon: '📸' },
-              { step: '2', en: 'Upload it to CropGuard AI',               ur: 'کراپ گارڈ پر اپلوڈ کریں',    icon: '⬆️' },
-              { step: '3', en: 'AI analyses and identifies the disease',   ur: 'اے آئی بیماری شناخت کرے گا',  icon: '🤖' },
-              { step: '4', en: 'Receive treatment advice instantly',       ur: 'فوری علاج کا مشورہ پائیں',    icon: '💊' },
-            ].map((s, i) => (
-              <div key={i} style={{
-                textAlign: 'center', padding: '24px 16px',
-                background: '#fff', borderRadius: 16,
-                border: '1.5px solid #BBF7D0',
-                opacity: howInView ? 1 : 0,
-                transform: howInView ? 'translateY(0)' : 'translateY(20px)',
-                transition: `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`,
-              }}>
-                <div style={{
-                  width: 48, height: 48, borderRadius: '50%',
-                  background: '#F0FDF4', border: '2px solid #BBF7D0',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  margin: '0 auto 14px', fontSize: 22,
-                }}>{s.icon}</div>
-                <div style={{
-                  display: 'inline-block',
-                  background: '#166534', color: '#fff',
-                  borderRadius: 999, padding: '2px 10px',
-                  fontSize: 11, fontWeight: 800,
-                  letterSpacing: '0.06em', marginBottom: 10,
-                }}>STEP {s.step}</div>
-                <p style={{ fontSize: 13.5, color: '#1F2937', fontWeight: 600, margin: '0 0 6px', lineHeight: 1.5 }}>{s.en}</p>
-                <p style={{ fontSize: 12, color: '#6B7280', margin: 0, fontFamily: 'serif', direction: 'rtl' }}>{s.ur}</p>
-              </div>
-            ))}
-          </div>
+      {/* ══ STATS ═════════════════════════════════════════════ */}
+      <div ref={statsRef} style={{ background: '#fff', borderTop: '1px solid #F3F4F6', borderBottom: '1px solid #F3F4F6' }}>
+        <div className="stats-grid" style={{ maxWidth: 860, margin: '0 auto' }}>
+          {stats.map((s, i) => (
+            <div key={i}>
+              <StatCard {...s} inView={statsInView} delay={i * 0.1} />
+            </div>
+          ))}
         </div>
       </div>
 
       {/* ══ CTA ═══════════════════════════════════════════════ */}
-      <div ref={ctaRef} style={{ background: '#fff', padding: 'clamp(48px, 8vw, 80px) 24px' }}>
+      <div ref={ctaRef} style={{ background: '#FAFAF8', padding: 'clamp(48px, 8vw, 80px) 24px' }}>
         <div style={{
           maxWidth: 600, margin: '0 auto', textAlign: 'center',
           opacity: ctaInView ? 1 : 0,
