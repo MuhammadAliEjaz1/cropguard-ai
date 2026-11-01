@@ -21,23 +21,23 @@ const team = [
 ];
 
 const gaps = [
-  { gap: 'Lab-only images — fail in real fields', improvement: '45,000+ real-field images across 6 Pakistani crops', icon: '🌾' },
+  { gap: 'Lab-only images — fail in real fields', improvement: 'Field-condition photos used wherever available — 49,000+ images from public datasets', icon: '🌾' },
   { gap: 'English-only output', improvement: 'Bilingual Urdu + English with natural spoken Pakistani Urdu', icon: '🗣️' },
-  { gap: 'Single model — cross-crop confusion', improvement: '6 independent per-crop models — no cross-crop confusion by design', icon: '🧠' },
+  { gap: 'Single model — cross-crop confusion', improvement: '6 independent per-crop models — the farmer picks the crop, so models never mix crops', icon: '🧠' },
   { gap: 'CNN diagnosis with no guidance', improvement: 'CNN detection + Gemini LLM treatment education', icon: '💊' },
   { gap: 'No disease spread awareness', improvement: 'Geo-tagged community disease warning map', icon: '🗺️' },
-  { gap: 'No integrated farming platform', improvement: '7 features in one platform built for Pakistan', icon: '📱' },
+  { gap: 'No integrated farming platform', improvement: 'Detection, expert chat, weather advice, crop calendar and disease map in one platform', icon: '📱' },
 ];
 
 const crops = [
   {
     emoji: '🌾',
     name: 'Wheat',
-    accuracy: '90.44%',
+    accuracy: '90.39%',
     classes: 15,
-    images: '14,117',
+    images: '14,154',
     arch: 'EfficientNetV2S',
-    sources: ['kushagra3204 (Kaggle)', 'Real field — train/valid/test split'],
+    sources: ['kushagra3204 (Kaggle)', 'Original train/valid/test folders merged, then split again 80/20'],
     bg: 'bg-amber-50', border: 'border-amber-200',
     badge: 'bg-amber-100 text-amber-800', dot: 'bg-amber-400',
     accent: 'text-amber-700',
@@ -45,11 +45,11 @@ const crops = [
   {
     emoji: '🌱',
     name: 'Rice',
-    accuracy: '97.90%',
+    accuracy: '98.03%',
     classes: 6,
     images: '9,108',
     arch: 'EfficientNetV2S',
-    sources: ['afzaalsattar (Kaggle)', 'Real field images'],
+    sources: ['afzaalsattar (Kaggle)', 'Original train/valid/test split kept'],
     bg: 'bg-blue-50', border: 'border-blue-200',
     badge: 'bg-blue-100 text-blue-800', dot: 'bg-blue-400',
     accent: 'text-blue-700',
@@ -57,7 +57,7 @@ const crops = [
   {
     emoji: '☁️',
     name: 'Cotton',
-    accuracy: '98.88%',
+    accuracy: '98.83%',
     classes: 4,
     images: '8,962',
     arch: 'EfficientNetB0',
@@ -69,7 +69,7 @@ const crops = [
   {
     emoji: '🎋',
     name: 'Sugarcane',
-    accuracy: '97.33%',
+    accuracy: '96.41%',
     classes: 6,
     images: '7,111',
     arch: 'EfficientNetB0',
@@ -81,11 +81,12 @@ const crops = [
   {
     emoji: '🌽',
     name: 'Corn',
-    accuracy: '88.57%',
-    classes: 8,
-    images: '5,381',
+    accuracy: '98.39%',
+    classes: 6,
+    images: '5,376',
     arch: 'EfficientNetV2S',
     sources: ['Mendeley Seasonal Corn Leaf Disease (Bangladesh)', 'CCMT Dataset — Raw Data (Kaggle)'],
+    note: 'Streak Virus is not included. Leaf Blight and Leaf Spot are grouped as one class.',
     bg: 'bg-yellow-50', border: 'border-yellow-200',
     badge: 'bg-yellow-100 text-yellow-800', dot: 'bg-yellow-400',
     accent: 'text-yellow-700',
@@ -93,11 +94,12 @@ const crops = [
   {
     emoji: '🥔',
     name: 'Potato',
-    accuracy: '92.82%',
-    classes: 8,
-    images: '5,228',
+    accuracy: '95.82%',
+    classes: 6,
+    images: '4,549',
     arch: 'EfficientNetV2S',
-    sources: ['faysalmiah1721758 (Kaggle)', 'Real-field images merged with PlantVillage'],
+    sources: ['Field-based potato leaf disease dataset (Kaggle: srkuhin)', 'PlantVillage potato images (Kaggle: aarishasifkhan)'],
+    note: 'Only diseases are detected: pests and nematodes are not included. Bacteria, Fungi and Virus are groups of diseases.',
     bg: 'bg-orange-50', border: 'border-orange-200',
     badge: 'bg-orange-100 text-orange-800', dot: 'bg-orange-400',
     accent: 'text-orange-700',
@@ -107,9 +109,9 @@ const crops = [
 const tech = [
   { label: 'Architecture', value: 'EfficientNetB0 + EfficientNetV2S (Transfer Learning)', icon: <Cpu size={16} /> },
   { label: 'Models', value: '6 independent per-crop CNN models', icon: <Zap size={16} /> },
-  { label: 'Disease Classes', value: '47 disease classes across 6 crops', icon: <FlaskConical size={16} /> },
-  { label: 'Training Images', value: '45,000+ real-field images', icon: <Database size={16} /> },
-  { label: 'Average Accuracy', value: '94.3% mean validation accuracy across 6 crops', icon: <Shield size={16} /> },
+  { label: 'Diseases & Pests', value: '37 diseases and pests across 6 crops (plus a Healthy class for each crop)', icon: <FlaskConical size={16} /> },
+  { label: 'Images Used', value: '49,000+ images from public datasets', icon: <Database size={16} /> },
+  { label: 'Average Accuracy', value: '96.3% mean validation accuracy across 6 crops', icon: <Shield size={16} /> },
   { label: 'LLM', value: 'Google Gemini 2.5 Flash (bilingual)', icon: <Globe size={16} /> },
   { label: 'Backend', value: 'FastAPI · Python 3.11 · Docker', icon: <Cpu size={16} /> },
   { label: 'Frontend', value: 'React.js 18 · Tailwind CSS · Vercel', icon: <Globe size={16} /> },
@@ -163,7 +165,7 @@ function About() {
         <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">About CropGuard AI</h1>
         <p className="text-gray-500 mt-3 text-lg max-w-2xl mx-auto leading-relaxed">
           A bilingual (Urdu/English) AI crop disease detection platform —
-          6 independently trained models, 47 disease classes, 94.3% mean validation accuracy.
+          6 independently trained models, 37 diseases and pests, 96.3% mean validation accuracy.
         </p>
         <p className="text-green-600 mt-2 text-base">
           پاکستانی کسانوں کے لیے اردو-انگریزی AI زرعی نظام
@@ -173,10 +175,10 @@ function About() {
       {/* STATS BAR */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {[
-          { value: '94.3%', label: 'Avg Val. Accuracy', sub: 'اوسط درستگی' },
-          { value: '47', label: 'Disease Classes', sub: 'بیماریوں کی اقسام' },
+          { value: '96.3%', label: 'Avg Val. Accuracy', sub: 'اوسط درستگی' },
+          { value: '37', label: 'Diseases & Pests', sub: 'بیماریاں اور کیڑے' },
           { value: '6', label: 'Crops Covered', sub: 'فصلیں' },
-          { value: '45K+', label: 'Training Images', sub: 'تربیتی تصاویر' },
+          { value: '49K+', label: 'Images Used', sub: 'استعمال شدہ تصاویر' },
         ].map((s, i) => (
           <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 text-center">
             <div className="text-3xl font-extrabold text-green-600">{s.value}</div>
@@ -201,8 +203,8 @@ function About() {
             we trained{' '}
             <span className="font-semibold text-gray-800">6 independent per-crop CNN models</span> —
             so one crop's model never mixes up another crop's diseases. A farmer selects their crop,
-            uploads a leaf photo, and receives an instant diagnosis with bilingual Urdu treatment
-            guidance specific to Pakistani pesticide brands and regional conditions.
+            uploads a leaf photo, and receives a quick AI result with bilingual Urdu and English
+            treatment guidance written for Pakistani farmers.
           </p>
           <p>
             Every dataset decision, every model trained, every line of code was built for one person:{' '}
@@ -238,6 +240,9 @@ function About() {
         </div>
         <p className="text-gray-400 text-sm mt-5 text-center">
           Final Year Project · BS Data Science · The Islamia University of Bahawalpur · 2025–2026
+        </p>
+        <p className="text-gray-500 text-sm mt-1 text-center">
+          Supervised by <span className="font-semibold text-gray-700">Dr. Faheem Mushtaq</span>
         </p>
       </Section>
 
@@ -282,14 +287,15 @@ function About() {
       {/* DATASETS */}
       <Section title="Datasets — Sources & Curation">
         <p className="text-gray-500 text-sm mb-5 leading-relaxed">
-          Each crop's dataset was independently curated from multiple real-field sources.
-          All sources were validated for image quality, checked for duplicates using MD5 hash
-          comparison, and cleaned of corrupt files before training. Lab-condition (PlantVillage-style)
-          images were replaced with real-field alternatives wherever possible.
+          Each crop's dataset was built from public datasets, and some crops combine several sources.
+          Every dataset was scanned for corrupt image files before training. For cotton and sugarcane,
+          the sources were also checked for exact duplicate files between sources using MD5 hash comparison.
+          PlantVillage (lab-condition) images are used only in the potato model, where they provide all
+          the Early Blight images and part of the Late Blight and Healthy images.
         </p>
         <p className="text-gray-500 text-sm mb-5 leading-relaxed">
-          Accuracy figures are measured on validation splits of these curated datasets,
-          not on independent field photos, so real-world performance may be lower.
+          Accuracy figures are validation accuracy, measured on splits of these public datasets,
+          not on independent photos from Pakistani fields, so real-world performance may be lower.
         </p>
         <div className="grid sm:grid-cols-2 gap-4">
           {crops.map((c, i) => (
@@ -330,8 +336,42 @@ function About() {
                   </div>
                 ))}
               </div>
+              {c.note && (
+                <p className="text-xs text-gray-500 mt-3 leading-snug">{c.note}</p>
+              )}
             </div>
           ))}
+        </div>
+      </Section>
+
+      {/* SCOPE & LIMITATIONS */}
+      <Section title="Scope & Limitations">
+        <ul className="space-y-3 text-sm text-gray-600 leading-relaxed list-disc pl-5">
+          <li>
+            Accuracy is validation accuracy. The same validation data was also used to choose the best
+            training checkpoint, and most crops have no separate test set.
+          </li>
+          <li>
+            The models were trained on public datasets that were not collected in Pakistani fields,
+            so photos taken by farmers (different lighting, backgrounds and cameras) may give lower accuracy.
+          </li>
+          <li>
+            Some classes come from a single dataset (for example, all Early Blight images in the potato model),
+            so a model can partly learn the style of a dataset instead of only the disease.
+          </li>
+          <li>
+            Only diseases that matter for the app are included. For example, the corn model has no Streak Virus
+            and the potato model does not detect pests.
+          </li>
+        </ul>
+        <div className="mt-5 p-4 bg-yellow-50 border border-yellow-200 rounded-xl text-center">
+          <p className="text-sm text-yellow-900">
+            AI results are a guide, not a final diagnosis. For serious problems, contact your local
+            agriculture extension officer.
+          </p>
+          <p className="text-sm text-yellow-800 mt-1">
+            اے آئی کے نتائج رہنمائی کے لیے ہیں، حتمی تشخیص نہیں۔
+          </p>
         </div>
       </Section>
 
