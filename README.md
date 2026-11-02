@@ -13,13 +13,13 @@
 
 CropGuard AI combines computer vision, a large language model, and geospatial reporting to diagnose crop diseases from a leaf photo and give bilingual treatment guidance. It runs in any smartphone browser, with no app installation.
 
-The machine learning work lives in [`notebooks/`](notebooks/): six per-crop EfficientNet classifiers trained on real-field images. The backend and trained weights are private; the frontend and all training notebooks are public.
+The machine learning work lives in [`notebooks/`](notebooks/): six per-crop EfficientNet classifiers trained on public datasets. The backend and trained weights are private; the frontend and all training notebooks are public.
 
 ---
 
 ## 📊 Model Performance
 
-Six independent per-crop models, 43 classes in total.
+Six independent per-crop models, 43 classes in total (37 diseases and pests, plus a Healthy class for each crop).
 
 | Crop | Backbone | Input | Classes | Images (train / val) | Val accuracy | Macro F1 | Weakest class (F1) |
 |---|---|---|---|---|---|---|---|
@@ -31,7 +31,7 @@ Six independent per-crop models, 43 classes in total.
 | Potato | EfficientNetV2-S | 384 | 6 | 4,549 (3,640 / 909) | 95.82% | 0.950 | Fungi (0.902) |
 | **Mean of 6 models** | | | **43 total** | | **96.3%** | **0.961** | |
 
-The mean is an unweighted average of the six per-crop validation accuracies, not a single pooled test set. Per-class precision, recall and confusion matrices are in each crop's notebook.
+The mean is an unweighted average of the six per-crop validation accuracies, not a single pooled test set. "Weakest class" is the class with the lowest F1 on the validation split. Per-class precision, recall and confusion matrices are in each crop's notebook.
 
 ### Classes
 
@@ -47,8 +47,9 @@ The mean is an unweighted average of the six per-crop validation accuracies, not
 ### Limitations
 
 - **Validation, not independent test.** Accuracy is measured on a validation split of the same curated data. Only the rice and corn models have a separate held-out test split (380 and 810 images). A test on photos from sources the models never saw is still pending, and real-field accuracy may be lower.
-- **Weak spots.** Wheat (Tan spot 0.683, Leaf Blight 0.720) and sugarcane (Mosaic, F1 0.915 with 86% recall) have the lowest per-class F1 and are the least reliable diagnoses. The corn virus class (Maize Chlorotic Mottle Virus) has only 14 test images, so its score is uncertain.
-- **Possible near-duplicate images.** The wheat, cotton, sugarcane and potato data come from several sources that were merged and split randomly. Near-identical photos (augmented copies, or several photos of the same leaf) may sit in both the training and validation splits, which can make scores look higher than they are.
+- **Weak spots.** Wheat (Tan spot 0.683, Leaf Blight 0.720) and sugarcane (Mosaic, F1 0.915 with 86% recall) have the lowest per-class F1 and are the least reliable diagnoses. In the potato model, Healthy has precision 0.85, so some diseased leaves are called Healthy. The corn virus class (Maize Chlorotic Mottle Virus) has only 14 test images, so its score is uncertain.
+- **Class scope.** The classes were chosen to cover diseases that matter for farmers in Pakistan, not to maximise accuracy. The corn model has no Streak Virus (an African disease) and treats Leaf Blight and Leaf Spot as one class. The potato model does not detect pests or nematodes, and its Bacteria, Fungi and Virus classes are groups of diseases, not single diseases.
+- **Possible near-duplicate images.** The wheat, cotton, sugarcane, corn and potato data were merged (from several sources or several original splits) and split again randomly. Near-identical photos (augmented copies, or several photos of the same leaf) may sit in both the training and validation splits, which can make scores look higher than they are. Exact duplicate files between sources were removed for cotton and sugarcane only, and in sugarcane some exact duplicates inside one source were kept.
 - **Single-source classes.** Some classes come from only one source (for example potato Early Blight comes only from PlantVillage), so a model may partly learn the photo style instead of the disease.
 - **The farmer picks the crop first.** Each model only knows its own crop's diseases, so a photo sent to the wrong crop's model will still return a (wrong) answer.
 
@@ -58,6 +59,19 @@ The mean is an unweighted average of the six per-crop validation accuracies, not
 
 All six models were trained in separate notebooks, one per crop (see [`notebooks/`](notebooks/)). Each covers data preparation, training, and evaluation with per-class metrics. Trained weights are not included.
 
+### Datasets
+
+The models were trained on 12 public dataset sources. Please check each dataset's own license and credit the original authors when reusing them.
+
+| Crop | Sources |
+|---|---|
+| Wheat | Kaggle: `kushagra3204/wheat-plant-diseases` |
+| Rice | Kaggle: `afzaalsattar/rice-disease-dataset` |
+| Cotton | Kaggle: `seroshkarim/cotton-leaf-disease-dataset`; SAR-CLD-2024 (Mendeley Data, used through Kaggle `chaliejaz/cotton-leaf-diseases`); Roboflow: `h-jintr/cotton-disease-detectionv2`; Roboflow: `cottonleafdisease-nvr42/cotton-leaf-disease-gwaqa` |
+| Sugarcane | Kaggle: `nirmalsankalana/sugarcane-leaf-disease-dataset`; Roboflow: `thayakar-ed3it/sugarcane-aht9u` |
+| Corn | Seasonal Corn Leaf Disease Dataset (Mendeley Data, Bangladesh); CCMT maize images (Kaggle: `irakozekelly/crop-pest-and-disease-dataset`) |
+| Potato | Kaggle: `srkuhin/field-based-potato-leaf-disease-dataset`; PlantVillage potato images (Kaggle: `aarishasifkhan/plantvillage-potato-disease-dataset`) |
+
 ---
 
 ## ✨ Features
@@ -66,7 +80,7 @@ All six models were trained in separate notebooks, one per crop (see [`notebooks
 Upload a photo of a crop leaf. The system runs that crop's model, shows the top-3 predictions with confidence scores, and generates bilingual treatment guidance using Google Gemini 2.5 Flash.
 
 ### 🤖 AI Agriculture Chatbot
-Ask farming questions in Urdu or English. The chatbot keeps conversation context and gives Pakistan-specific advice, including local pesticide brand names.
+Ask farming questions in Urdu or English. The chatbot keeps conversation context, retrieves answers from a farming knowledge base covering 14 crops, and gives Pakistan-specific advice, including local pesticide brand names.
 
 ### 🗺️ Disease Warning Map
 Community geo-tagged disease reporting on an interactive OpenStreetMap, with outbreak alerts when the same disease is reported across multiple nearby locations.
@@ -82,6 +96,12 @@ Seasonal planting guides for all 6 crops across Punjab, Sindh, KPK, and Balochis
 
 ### 🧮 Fertilizer & Spray Calculator
 Enter crop type and land area in acres to get fertilizer quantities (DAP, Urea, Potash) with prices in Pakistani Rupees, plus a crop-specific spray guide.
+
+---
+
+## ⚠️ Disclaimer
+
+AI results are a guide, not a final diagnosis. Pesticide brands, doses and prices shown by the app come from its guides and AI answers, and they may be incomplete or out of date. Always check the product label and ask a local agriculture extension officer before spraying, especially for serious outbreaks.
 
 ---
 
@@ -103,6 +123,7 @@ Enter crop type and land area in acres to get fertilizer quantities (DAP, Urea, 
 | FastAPI (Python) | REST API |
 | TensorFlow / Keras | CNN inference |
 | Google Gemini 2.5 Flash | Bilingual advice and pest identification |
+| Pinecone | Vector store for the chatbot's retrieval layer |
 | Docker | Containerized deployment |
 | Hugging Face Spaces | Hosting |
 | Google Drive + gdown | Model weight storage and download |
@@ -212,8 +233,8 @@ Tested on Android phones (360–414px), iPhones (375–430px), tablets, and desk
 **Why separate models per crop?**
 A single unified model confused diseases across crops (for example, predicting rice leaf blight as wheat leaf blight). With per-crop models the farmer selects their crop first, and only that crop's model runs, which removes that error source. The trade-off is that a wrong crop selection gives a wrong answer.
 
-**Why real-field images over PlantVillage?**
-PlantVillage uses white-background lab photos that transfer poorly to real field conditions. The training data here is mostly real field images curated across 15+ independent sources. Potato is the exception: it also uses the potato part of PlantVillage (lab photos), including all of its Early Blight images.
+**Why field photos over PlantVillage?**
+PlantVillage uses white-background lab photos that transfer poorly to real field conditions. Field-condition photos were preferred wherever they were available, and the training data comes from 12 public dataset sources (see Datasets). Potato is the exception: it also uses the potato part of PlantVillage (lab photos), including all of its Early Blight images.
 
 **Why OpenStreetMap over Google Maps?**
 Google Maps requires billing setup. OpenStreetMap via Leaflet.js is free, has no usage limits, and includes Urdu place names for Pakistani cities.
@@ -229,11 +250,15 @@ In testing, Gemini 2.5 Flash produced more natural spoken Urdu than the open-sou
 
 **Ahmad Siddique**: Frontend development, UI/UX, feature integration
 
+**Supervisor:** Dr. Faheem Mushtaq
+
+Final Year Project, The Islamia University of Bahawalpur (IUB)
+
 ---
 
 ## 📄 License
 
-MIT License. See the [LICENSE](LICENSE) file.
+MIT License. See the [LICENSE](LICENSE) file. It covers the code in this repository (frontend and notebooks). The datasets keep their own licenses.
 
 > The trained model weights and backend inference engine are proprietary and not included in this repository.
 
