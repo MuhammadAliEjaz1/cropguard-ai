@@ -5,17 +5,16 @@ import { Leaf, Cpu, Database, FlaskConical, Globe, Shield, Zap } from 'lucide-re
 const team = [
   {
     name: 'Muhammad Ali Ejaz',
-    initials: 'MA',
-    role: 'ML Engineer · Full-Stack · Research',
-    focus: 'End-to-end project lead: per-crop model architecture, transfer learning, dataset curation, FastAPI backend, React frontend, LLM integration, bilingual UI, disease map & full deployment',
+    initials: 'AE',
+    role: 'ML Engineer · Backend · Architecture',
+    focus: 'Per-crop model architecture, transfer learning, dataset curation, FastAPI backend, LLM integration and deployment.',
     color: 'from-emerald-500 to-green-600',
-    highlight: true,
   },
   {
     name: 'Ahmad Siddique',
     initials: 'AS',
-    role: 'Data Preprocessing · Frontend',
-    focus: 'Dataset cleaning, image validation, preprocessing pipeline, and frontend development support',
+    role: 'Frontend · UI/UX · Data Preprocessing',
+    focus: 'Frontend development, UI/UX design, feature integration, dataset cleaning, image validation and preprocessing.',
     color: 'from-teal-500 to-emerald-600',
   },
 ];
